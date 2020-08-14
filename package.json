@@ -1,0 +1,40 @@
+{
+  "name": "intlify-devtools",
+  "description": "Browser devtools extension for debugging Intlify applications",
+  "version": "0.0.0",
+  "author": {
+    "name": "kazuya kawaguchi",
+    "email": "kawakazu80@gmail.com"
+  },
+  "bugs": {
+    "url": "https://github.com/intlify/intlify-devtools/issues"
+  },
+  "changelog": {
+    "labels": {
+      "Type: Feature": ":star: Features",
+      "Type: Bug": ":bug: Bug Fixes",
+      "Type: Security": ":lock: Security Fixes",
+      "Type: Performance": ":chart_with_upwards_trend: Performance Fixes",
+      "Type: Improvement": ":zap: Improvement Features",
+      "Type: Breaking": ":boom: Breaking Change",
+      "Type: Deprecated": ":warning: Deprecated Features",
+      "Type: I18n": ":globe_with_meridians: Internationalization",
+      "Type: A11y": ":wheelchair: Accessibility",
+      "Type: Documentation": ":pencil: Documentation"
+    }
+  },
+  "devDependencies": {
+    "lerna": "^3.22.1",
+    "lerna-changelog": "^1.0.1"
+  },
+  "homepage": "https://github.com/intlify/intlify-devtools#readme",
+  "license": "MIT",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/intlify/intlify-devtools.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
