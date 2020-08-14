@@ -3,6 +3,7 @@ node_modules
 .DS_Store
 .idea
 .vscode
+packages/**/*.tsbuildinfo
 # jest dump files
 *.log
 *.swp

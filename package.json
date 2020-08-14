@@ -35,6 +35,11 @@
     "url": "git+https://github.com/intlify/intlify-devtools.git"
   },
   "scripts": {
+    "build": "lerna run build",
+    "clean": "lerna run clean",
     "test": "echo \"Error: no test specified\" && exit 1"
-  }
+  },
+  "workspaces": [
+    "packages/*"
+  ]
 }

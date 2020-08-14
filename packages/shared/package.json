@@ -1,0 +1,36 @@
+{
+  "name": "@intlify-devtools/shared",
+  "version": "0.0.0",
+  "private": true,
+  "description": "shared package for intlify-devtools",
+  "author": {
+    "name": "kazuya kawaguchi",
+    "email": "kawakazu80@gmail.com"
+  },
+  "homepage": "https://github.com/intlify/intlify-devtools/tree/master/packages/shared#readme",
+  "license": "MIT",
+  "main": "lib/shared.js",
+  "directories": {
+    "lib": "lib",
+    "test": "test"
+  },
+  "files": [
+    "lib"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/intlify/intlify-devtools.git"
+  },
+  "scripts": {
+    "build": "tsc -b",
+    "watch": "tsc -b --watch",
+    "clean": "rm -rf lib/*.*",
+    "test": "echo \"Error: run tests from root\" && exit 1"
+  },
+  "bugs": {
+    "url": "https://github.com/intlify/intlify-devtools/issues"
+  },
+  "devDependencies": {
+    "typescript": "^3.9.7"
+  }
+}
