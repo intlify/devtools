@@ -52,7 +52,7 @@
   },
   "license": "MIT",
   "lint-staged": {
-    "*.{js,json,md,yml": [
+    "*.{js,json,md,yml}": [
       "yarn format:fix",
       "git add"
     ],
