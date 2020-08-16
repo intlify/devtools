@@ -1,1 +1,3 @@
 packages/**/jest.config.js
+packages/**/lib/*.js
+packages/**/lib/*.ts
