@@ -56,7 +56,7 @@
       "yarn format:fix",
       "git add"
     ],
-    "*.{js,ts}": [
+    "*.ts": [
       "yarn lint:fix",
       "git add"
     ]
