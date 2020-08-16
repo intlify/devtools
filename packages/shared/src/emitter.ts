@@ -1,5 +1,4 @@
-export interface Emitter {
-}
+export interface Emitter {}
 
 export function createEmitter(): Emitter {
   return {}
