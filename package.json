@@ -44,6 +44,7 @@
     "url": "git+https://github.com/intlify/intlify-devtools.git"
   },
   "scripts": {
+    "bootstrap": "lerna run bootstrap",
     "build": "lerna run build",
     "clean": "lerna run clean",
     "fix": "npm-run-all --parallel lint:fix format:fix",

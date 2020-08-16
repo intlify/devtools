@@ -31,6 +31,7 @@
     "url": "https://github.com/intlify/intlify-devtools/issues"
   },
   "devDependencies": {
-    "typescript": "^3.9.7"
+    "typescript": "^3.9.7",
+    "typescript-eslint-language-service": "^3.1.0"
   }
 }
