@@ -1,7 +1,7 @@
-'use strict';
+'use strict'
 
-const shared = require('../lib/shared');
+const shared = require('../lib/shared')
 
 describe('shared', () => {
-    it('needs tests');
-});
+  it('needs tests')
+})

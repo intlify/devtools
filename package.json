@@ -25,7 +25,8 @@
   },
   "devDependencies": {
     "lerna": "^3.22.1",
-    "lerna-changelog": "^1.0.1"
+    "lerna-changelog": "^1.0.1",
+    "prettier": "^2.0.5"
   },
   "homepage": "https://github.com/intlify/intlify-devtools#readme",
   "license": "MIT",
@@ -37,6 +38,8 @@
   "scripts": {
     "build": "lerna run build",
     "clean": "lerna run clean",
+    "format": "prettier --config .prettierrc --ignore-path .prettierignore '**/*.{js,json,html}'",
+    "format:fix": "yarn format --write",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "workspaces": [
