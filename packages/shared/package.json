@@ -24,7 +24,7 @@
   "scripts": {
     "build": "tsc -b",
     "watch": "tsc -b --watch",
-    "clean": "rm -rf lib/*.*"
+    "clean": "rimraf lib/*.* tsconfig.tsbuildinfo"
   },
   "bugs": {
     "url": "https://github.com/intlify/intlify-devtools/issues"
