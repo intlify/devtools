@@ -24,8 +24,7 @@
   "scripts": {
     "build": "tsc -b",
     "watch": "tsc -b --watch",
-    "clean": "rm -rf lib/*.*",
-    "test": "echo \"Error: run tests from root\" && exit 1"
+    "clean": "rm -rf lib/*.*"
   },
   "bugs": {
     "url": "https://github.com/intlify/intlify-devtools/issues"
