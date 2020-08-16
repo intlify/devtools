@@ -1,10 +1,9 @@
-'use strict'
-
 module.exports = {
   root: true,
   globals: {},
   env: {
-    node: true
+    node: true,
+    jest: true
   },
   extends: [
     'plugin:vue-libs/recommended',
