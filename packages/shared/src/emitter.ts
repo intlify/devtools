@@ -1,5 +1,5 @@
 /**
- * Event emitter
+ * Event emitter, forked from the below:
  * - original repository url: https://github.com/developit/mitt
  * - code url: https://github.com/developit/mitt/blob/master/src/index.ts
  * - author: Jason Miller (https://github.com/developit)
