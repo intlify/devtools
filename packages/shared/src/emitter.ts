@@ -6,13 +6,15 @@
  * - license: MIT
  */
 
-import { EventType, EventHandler, Emittable } from './emittable'
-
-type EventHandlerList<T = unknown> = Array<EventHandler<T>>
-type EventHandlerMap<Events extends Record<EventType, unknown>> = Map<
-  keyof Events,
-  EventHandlerList<Events[keyof Events]>
->
+import {
+  EventType,
+  EventHandler,
+  WildcardEventHandler,
+  EventHandlerList,
+  WildcardEventHandlerList,
+  EventHandlerMap,
+  Emittable
+} from './emittable'
 
 /**
  * Create a event emitter
@@ -22,14 +24,19 @@ type EventHandlerMap<Events extends Record<EventType, unknown>> = Map<
 export function createEmitter<
   Events extends Record<EventType, unknown>
 >(): Emittable<Events> {
+  type GenericEventHandler =
+    | EventHandler<Events[keyof Events]>
+    | WildcardEventHandler<Events>
   const events = new Map() as EventHandlerMap<Events>
 
   return {
+    events,
+
     on<Key extends keyof Events>(
       event: Key,
-      handler: EventHandler<Events[keyof Events]>
+      handler: GenericEventHandler
     ): void {
-      const handlers = events.get(event)
+      const handlers: Array<GenericEventHandler> | undefined = events.get(event)
       const added = handlers && handlers.push(handler)
       if (!added) {
         events.set(event, [handler] as EventHandlerList<Events[keyof Events]>)
@@ -38,9 +45,9 @@ export function createEmitter<
 
     off<Key extends keyof Events>(
       event: Key,
-      handler: EventHandler<Events[keyof Events]>
+      handler: GenericEventHandler
     ): void {
-      const handlers = events.get(event)
+      const handlers: Array<GenericEventHandler> | undefined = events.get(event)
       if (handlers) {
         handlers.splice(handlers.indexOf(handler) >>> 0, 1)
       }
@@ -53,6 +60,9 @@ export function createEmitter<
       ;((events.get(event) || []) as EventHandlerList<Events[keyof Events]>)
         .slice()
         .map(handler => handler(payload))
+      ;((events.get('*') || []) as WildcardEventHandlerList<Events>)
+        .slice()
+        .map(handler => handler(event, payload))
     }
   }
 }
