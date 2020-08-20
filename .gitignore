@@ -4,6 +4,7 @@ node_modules
 .idea
 .vscode
 packages/**/*.tsbuildinfo
+packages/**/lib/*.*
 # jest dump files
 *.log
 *.swp
