@@ -33,7 +33,7 @@ export function createEmitter<
     events,
 
     on<Key extends keyof Events>(
-      event: Key,
+      event: Key | '*',
       handler: GenericEventHandler
     ): void {
       const handlers: Array<GenericEventHandler> | undefined = events.get(event)
@@ -44,7 +44,7 @@ export function createEmitter<
     },
 
     off<Key extends keyof Events>(
-      event: Key,
+      event: Key | '*',
       handler: GenericEventHandler
     ): void {
       const handlers: Array<GenericEventHandler> | undefined = events.get(event)
@@ -54,7 +54,7 @@ export function createEmitter<
     },
 
     emit<Key extends keyof Events>(
-      event: Key,
+      event: Key | '*',
       payload?: Events[keyof Events]
     ): void {
       ;((events.get(event) || []) as EventHandlerList<Events[keyof Events]>)
