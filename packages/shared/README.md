@@ -1,7 +1,6 @@
 # @intlify-devtools/shared
 
-shared package for intlify-devtools
-
+Shared package for intlify-devtools
 
 ## :copyright: License
 

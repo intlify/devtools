@@ -1,18 +1,17 @@
 {
-  "name": "@intlify-devtools/shared",
+  "name": "@intlify-devtools/shell-dev",
   "version": "0.0.0",
   "private": true,
-  "description": "Shared package for intlify-devtools",
+  "description": "Development shell package for intlify-devtools",
   "author": {
     "name": "kazuya kawaguchi",
     "email": "kawakazu80@gmail.com"
   },
-  "homepage": "https://github.com/intlify/intlify-devtools/tree/master/packages/shared#readme",
+  "homepage": "https://github.com/intlify/intlify-devtools/tree/master/packages/shell-dev#readme",
   "license": "MIT",
-  "main": "lib/shared.js",
+  "main": "lib/shell-dev.js",
   "directories": {
-    "lib": "lib",
-    "test": "test"
+    "lib": "lib"
   },
   "files": [
     "lib"
@@ -21,11 +20,7 @@
     "type": "git",
     "url": "git+https://github.com/intlify/intlify-devtools.git"
   },
-  "scripts": {
-    "build": "tsc -b",
-    "watch": "tsc -b --watch",
-    "clean": "rimraf lib/*.* tsconfig.tsbuildinfo"
-  },
+  "scripts": {},
   "bugs": {
     "url": "https://github.com/intlify/intlify-devtools/issues"
   },
