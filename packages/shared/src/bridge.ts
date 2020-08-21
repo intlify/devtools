@@ -220,7 +220,7 @@ export function createBridge<Events extends Record<EventType, unknown>>(
       _sending = true
       const messages = _sendingQueue.shift()
       try {
-        messages && wall.send?.(messages)
+        messages && wall.send && wall.send(messages)
       } catch (e) {
         if (
           e.message === 'Message length exceeded maximum allowed length.' &&
@@ -239,11 +239,12 @@ export function createBridge<Events extends Record<EventType, unknown>>(
   }
 
   // emit the message to the bridge from the wall
-  wall.listen?.(messages => {
-    isArray(messages)
-      ? messages.forEach(message => bridge._emit(message))
-      : bridge._emit(messages)
-  })
+  wall.listen &&
+    wall.listen(messages => {
+      isArray(messages)
+        ? messages.forEach(message => bridge._emit(message))
+        : bridge._emit(messages)
+    })
 
   return bridge
 }

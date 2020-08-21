@@ -3,6 +3,7 @@ node_modules
 .DS_Store
 .idea
 .vscode
+coverage
 packages/**/*.tsbuildinfo
 packages/**/lib/*.*
 # jest dump files
