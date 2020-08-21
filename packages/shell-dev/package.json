@@ -9,22 +9,29 @@
   },
   "homepage": "https://github.com/intlify/intlify-devtools/tree/master/packages/shell-dev#readme",
   "license": "MIT",
-  "main": "lib/shell-dev.js",
   "directories": {
-    "lib": "lib"
+    "dist": "dist"
   },
   "files": [
-    "lib"
+    "dist"
   ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/intlify/intlify-devtools.git"
   },
-  "scripts": {},
+  "scripts": {
+    "dev": "webpack-dev-server --inline --hot --no-info",
+    "build": "webpack",
+    "clean": "rimraf build/*.*"
+  },
   "bugs": {
     "url": "https://github.com/intlify/intlify-devtools/issues"
   },
   "devDependencies": {
-    "typescript": "^4.0.2"
+    "ts-loader": "^8.0.2",
+    "typescript": "^4.0.2",
+    "webpack": "^4.44.1",
+    "webpack-cli": "^3.3.12",
+    "webpack-dev-server": "^3.11.0"
   }
 }

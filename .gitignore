@@ -4,8 +4,9 @@ node_modules
 .idea
 .vscode
 coverage
-packages/**/*.tsbuildinfo
-packages/**/lib/*.*
+build
+*.tsbuildinfo
+lib
 # jest dump files
 *.log
 *.swp

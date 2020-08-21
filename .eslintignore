@@ -1,3 +1,4 @@
-packages/**/jest.config.js
-packages/**/lib/*.js
-packages/**/lib/*.ts
+jest.config.js
+webpack.config.js
+lib
+build

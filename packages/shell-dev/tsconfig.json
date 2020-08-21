@@ -1,0 +1,11 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "target": "esnext",
+    "module": "es2015",
+    "rootDir": "src",
+    "outDir": "build",
+    "lib": ["es2020", "dom"]
+  },
+  "include": ["src/**/*"]
+}
