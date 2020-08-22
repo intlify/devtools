@@ -1,30 +1,28 @@
 {
   "name": "@intlify-devtools/shell-chrome",
-  "version": "0.0.0",
-  "private": true,
   "description": "Chrome Extentions shell package for intlify-devtools",
+  "version": "0.0.0",
   "author": {
     "name": "kazuya kawaguchi",
     "email": "kawakazu80@gmail.com"
-  },
-  "homepage": "https://github.com/intlify/intlify-devtools/tree/master/packages/shell-chrome#readme",
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/intlify/intlify-devtools.git"
-  },
-  "scripts": {
-    "build": "ts-node ./scripts/build.ts "
   },
   "bugs": {
     "url": "https://github.com/intlify/intlify-devtools/issues"
   },
   "devDependencies": {
     "@types/node": "^14.6.0",
+    "@types/rimraf": "^3.0.0",
     "ts-node": "^9.0.0",
     "vite": "^1.0.0-rc.4"
   },
-  "dependencies": {
-    "@types/rimraf": "^3.0.0"
+  "homepage": "https://github.com/intlify/intlify-devtools/tree/master/packages/shell-chrome#readme",
+  "license": "MIT",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/intlify/intlify-devtools.git"
+  },
+  "scripts": {
+    "build": "ts-node ./scripts/build.ts "
   }
 }
