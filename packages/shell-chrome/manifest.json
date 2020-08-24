@@ -9,7 +9,7 @@
     "devtools-background.html",
     "build/backend.js"
   ],
-  "devtools_page": "devtools.html",
+  "devtools_page": "devtools-background.html",
   "background": {
     "scripts": ["build/background.js"],
     "persistent": false
