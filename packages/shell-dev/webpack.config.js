@@ -19,12 +19,35 @@ module.exports = (env = {}) => ({
     rules: [
       {
         test: /\.ts$/,
-        use: 'ts-loader'
+        exclude: /node_modules/,
+        use: [
+          {
+            loader: 'babel-loader'
+          },
+          {
+            loader: 'ts-loader',
+            options: {
+              transpileOnly: true
+            }
+          }
+        ]
+      },
+      {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        use: [
+          {
+            loader: 'babel-loader'
+          }
+        ]
       }
     ]
   },
 
   resolve: {
-    extensions: ['.ts', '.js']
+    extensions: ['.ts', '.js'],
+    alias: {
+      '@intlify-devtools/shared': path.resolve(__dirname, '../shared/lib')
+    }
   }
 })

@@ -7,5 +7,11 @@
     "outDir": "build",
     "lib": ["es2020", "dom"]
   },
-  "include": ["src/**/*"]
+  "include": ["src/**/*"],
+  "exclude": ["node_modules"],
+  "references": [
+    {
+      "path": "../shared"
+    }
+  ]
 }

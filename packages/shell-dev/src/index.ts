@@ -1,3 +1,5 @@
+import { createBridge } from '@intlify-devtools/shared'
+
 type Foo = {
   foo?: (msg: string) => void
 }
@@ -8,13 +10,24 @@ const foo: Foo = {
   }
 }
 
-foo.foo && foo.foo('run shell-dev!')
+foo.foo?.('run shell-dev!')
 
 const target = document.getElementById('target') as HTMLIFrameElement
+const targetWindow = target.contentWindow
+
 target.src = 'target.html'
 target.onload = () => {
   inject(target, './build/backend.js', () => {
-    console.log('inject backend!')
+    const bridge = createBridge({
+      listen(fn) {
+        targetWindow?.parent.addEventListener('message', evt => fn(evt.data))
+      },
+      send(data) {
+        console.log('devtools -> backend', data)
+        targetWindow?.postMessage(data, '*')
+      }
+    })
+    console.log('inject backend!', bridge)
   })
 }
 
