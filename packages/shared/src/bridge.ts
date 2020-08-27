@@ -57,8 +57,9 @@ export type MessageData = string | MessageChunk | MessagePayload
 /**
  * Message bridge interface
  */
-export interface Bridge<Events extends Record<EventType, unknown>>
-  extends Emittable<Events> {
+export interface Bridge<
+  Events extends Record<EventType, unknown> = Record<string, unknown>
+> extends Emittable<Events> {
   /**
    * Send the message
    *
