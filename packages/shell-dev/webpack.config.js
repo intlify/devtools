@@ -77,6 +77,10 @@ module.exports = (env = {}) => ({
     extensions: ['.ts', '.js', '.vue'],
     alias: {
       '@intlify-devtools/shared': path.resolve(__dirname, '../shared/lib'),
+      '@intlify-devtools/app-frontend': path.resolve(
+        __dirname,
+        '../app-frontend/lib'
+      ),
       vue: require.resolve('vue/dist/vue.esm-bundler.js')
     }
   },

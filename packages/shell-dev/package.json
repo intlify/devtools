@@ -10,6 +10,7 @@
     "url": "https://github.com/intlify/intlify-devtools/issues"
   },
   "dependencies": {
+    "@intlify-devtools/app-frontend": "^0.0.0",
     "@intlify-devtools/shared": "^0.0.0",
     "core-js": "^3.6.5",
     "vue": "3.0.0-rc.9",
