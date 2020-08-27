@@ -1,5 +1,6 @@
 const path = require('path')
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin')
+const { VueLoaderPlugin } = require('vue-loader')
 
 module.exports = (env = {}) => ({
   mode: env.prod ? 'production' : 'development',
@@ -8,7 +9,8 @@ module.exports = (env = {}) => ({
   entry: {
     main: './src/index.ts',
     hook: './src/hook.ts',
-    backend: './src/backend.ts'
+    backend: './src/backend.ts',
+    target: './src/target/index.ts'
   },
   output: {
     path: path.resolve(__dirname, './build'),
@@ -18,6 +20,10 @@ module.exports = (env = {}) => ({
 
   module: {
     rules: [
+      {
+        test: /\.vue$/,
+        loader: 'vue-loader'
+      },
       {
         test: /\.ts$/,
         exclude: /node_modules/,
@@ -37,7 +43,8 @@ module.exports = (env = {}) => ({
             loader: 'ts-loader',
             options: {
               happyPackMode: true,
-              transpileOnly: true
+              transpileOnly: true,
+              appendTsSuffixTo: [/\.vue$/]
             }
           }
         ]
@@ -50,18 +57,32 @@ module.exports = (env = {}) => ({
             loader: 'babel-loader'
           }
         ]
+      },
+      {
+        resourceQuery: /blockType=i18n/,
+        type: 'javascript/auto',
+        use: [
+          {
+            loader: '@intlify/vue-i18n-loader'
+            // options: {
+            //   preCompile: true
+            // }
+          }
+        ]
       }
     ]
   },
 
   resolve: {
-    extensions: ['.ts', '.js'],
+    extensions: ['.ts', '.js', '.vue'],
     alias: {
-      '@intlify-devtools/shared': path.resolve(__dirname, '../shared/lib')
+      '@intlify-devtools/shared': path.resolve(__dirname, '../shared/lib'),
+      vue: require.resolve('vue/dist/vue.esm-bundler.js')
     }
   },
 
   plugins: [
+    new VueLoaderPlugin(),
     new ForkTsCheckerWebpackPlugin({
       typescript: {
         diagnosticOptions: {
