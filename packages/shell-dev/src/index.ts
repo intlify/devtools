@@ -1,17 +1,5 @@
 import { createBridge } from '@intlify-devtools/shared'
 
-type Foo = {
-  foo?: (msg: string) => void
-}
-
-const foo: Foo = {
-  foo(msg) {
-    console.log(msg)
-  }
-}
-
-foo.foo?.('run shell-dev!')
-
 const target = document.getElementById('target') as HTMLIFrameElement
 const targetWindow = target.contentWindow
 
