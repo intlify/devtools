@@ -30,5 +30,8 @@
   },
   "devDependencies": {
     "typescript": "^4.0.2"
+  },
+  "dependencies": {
+    "@intlify-devtools/shared": "^0.0.0"
   }
 }
