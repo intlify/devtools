@@ -9,7 +9,7 @@
   },
   "homepage": "https://github.com/intlify/intlify-devtools/tree/master/packages/shared#readme",
   "license": "MIT",
-  "main": "./lib/shared.js",
+  "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
   "directories": {
     "lib": "lib",
