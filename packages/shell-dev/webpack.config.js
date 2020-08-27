@@ -1,4 +1,5 @@
 const path = require('path')
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin')
 
 module.exports = (env = {}) => ({
   mode: env.prod ? 'production' : 'development',
@@ -21,12 +22,21 @@ module.exports = (env = {}) => ({
         test: /\.ts$/,
         exclude: /node_modules/,
         use: [
+          { loader: 'cache-loader' },
+          {
+            loader: 'thread-loader',
+            options: {
+              workers: require('os').cpus().length - 1,
+              poolTimeout: Infinity
+            }
+          },
           {
             loader: 'babel-loader'
           },
           {
             loader: 'ts-loader',
             options: {
+              happyPackMode: true,
               transpileOnly: true
             }
           }
@@ -49,5 +59,16 @@ module.exports = (env = {}) => ({
     alias: {
       '@intlify-devtools/shared': path.resolve(__dirname, '../shared/lib')
     }
-  }
+  },
+
+  plugins: [
+    new ForkTsCheckerWebpackPlugin({
+      typescript: {
+        diagnosticOptions: {
+          semantic: true,
+          syntactic: true
+        }
+      }
+    })
+  ]
 })
