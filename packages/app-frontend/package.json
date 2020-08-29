@@ -1,6 +1,7 @@
 {
   "name": "@intlify-devtools/app-frontend",
   "private": true,
+  "description": "Frontend application for intlify-devtools",
   "version": "0.0.0",
   "author": {
     "name": "kazuya kawaguchi",
