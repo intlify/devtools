@@ -1,16 +1,17 @@
-import { createBridge } from '@intlify-devtools/shared'
+import { createBridge, Bridge } from '@intlify-devtools/shared'
 import { setupDevtools } from '@intlify-devtools/app-frontend'
 
 const target = document.getElementById('target') as HTMLIFrameElement
 const targetWindow = target.contentWindow
 
+let bridge: Bridge
+
 target.src = 'target.html'
 target.onload = () => {
   setupDevtools({
     connect(fn): void {
-      // TODO
       inject(target, './build/backend.js', () => {
-        const bridge = createBridge({
+        bridge = createBridge({
           listen(fn) {
             targetWindow?.parent.addEventListener('message', evt =>
               fn(evt.data)
@@ -26,7 +27,9 @@ target.onload = () => {
       })
     },
     onReload(fn): void {
-      target.onload = fn
+      target.onload = () => {
+        fn(bridge)
+      }
     }
   })
 }
