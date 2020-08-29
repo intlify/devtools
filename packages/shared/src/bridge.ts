@@ -64,11 +64,11 @@ export interface Bridge<
    * Send the message
    *
    * @param event - A message event type
-   * @param payload - A message event payload
+   * @param payload - A message event payload, optional
    */
   send<Key extends keyof Events>(
     event: Key,
-    payload: Events[keyof Events]
+    payload?: Events[keyof Events]
   ): void
 
   /**
