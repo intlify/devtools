@@ -81,6 +81,10 @@ module.exports = (env = {}) => ({
         __dirname,
         '../app-frontend/src'
       ),
+      '@intlify-devtools/app-backend': path.resolve(
+        __dirname,
+        '../app-backend/src'
+      ),
       vue: require.resolve('vue/dist/vue.esm-bundler.js')
     }
   },
