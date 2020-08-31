@@ -9,7 +9,7 @@ export type EventType = string | symbol
 export type EventHandler<T = unknown> = (payload?: T) => void
 
 /**
- * Wildcad event handler
+ * Wildcard event handler
  */
 export type WildcardEventHandler<T = Record<string, unknown>> = (
   event: keyof T,
@@ -41,15 +41,15 @@ export type EventHandlerMap<Events extends Record<EventType, unknown>> = Map<
  */
 export interface Emittable<Events extends Record<EventType, unknown>> {
   /**
-   * Registered event handlers
+   * A map of event names of registered event handlers
    */
   events: EventHandlerMap<Events>
 
   /**
    * Register an event handler with the event type
    *
-   * @param event - An event type
-   * @param handler - An event handler
+   * @param event - An {@link EventType}
+   * @param handler - An {@link EventHandler}, or a {@link WildcardEventHandler} if you are specified "*"
    */
   on<Key extends keyof Events>(
     event: Key | '*',
@@ -57,18 +57,10 @@ export interface Emittable<Events extends Record<EventType, unknown>> {
   ): void
 
   /**
-   * Register an event handler wth all event type
-   *
-   * @param event - All event type
-   * @param handler - An event handler
-   */
-  // on(event: '*', handler: WildcardEventHandler<Events>): void
-
-  /**
    * Unregister an event handler for the event type
    *
-   * @param event - An event type
-   * @param handler - An event handler
+   * @param event - An {@link EventType}
+   * @param handler - An {@link EventHandler}, or a {@link WildcardEventHandler} if you are specified "*"
    */
   off<Key extends keyof Events>(
     event: Key | '*',
@@ -76,21 +68,27 @@ export interface Emittable<Events extends Record<EventType, unknown>> {
   ): void
 
   /**
-   * Unregsiter an event handler for all event type
+   * Register an event handler to receive an event only once
    *
-   * @param event - All event type
-   * @param handler - An event handler
+   * @param event - An {@link EventType}
+   * @param handler - An {@link EventHandler}
    */
-  // off(event: '*', handler: WildcardEventHandler<Events>): void
+  once<Key extends keyof Events>(
+    event: Key,
+    handler: EventHandler<Events[keyof Events]>
+  ): void
 
   /**
    * Invoke all handlers with the event type
    *
-   * @param event - An event type
+   * @remarks
+   * Note Manually firing "*" handlers should be not supported
+   *
+   * @param event - An {@link EventType}
    * @param payload - An event payload, optional
    */
   emit<Key extends keyof Events>(
-    event: Key | '*',
+    event: Key,
     payload?: Events[keyof Events]
   ): void
 }

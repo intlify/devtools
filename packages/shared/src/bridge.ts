@@ -142,6 +142,13 @@ export function createBridge<Events extends Record<EventType, unknown>>(
       _emitter.off(event, handler)
     },
 
+    once<Key extends keyof Events>(
+      event: Key,
+      handler: EventHandler<Events[keyof Events]>
+    ): void {
+      _emitter.once(event, handler)
+    },
+
     emit<Key extends keyof Events>(
       event: Key | '*',
       payload?: Events[keyof Events]

@@ -29,7 +29,7 @@ export function createEmitter<
     | WildcardEventHandler<Events>
   const events = new Map() as EventHandlerMap<Events>
 
-  return {
+  const emitter = {
     events,
 
     on<Key extends keyof Events>(
@@ -53,8 +53,20 @@ export function createEmitter<
       }
     },
 
+    once<Key extends keyof Events>(
+      event: Key,
+      handler: EventHandler<Events[keyof Events]>
+    ): void {
+      const on = (...args: unknown[]): void => {
+        emitter.off(event, on)
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        handler.apply(emitter, args as any)
+      }
+      emitter.on(event, on)
+    },
+
     emit<Key extends keyof Events>(
-      event: Key | '*',
+      event: Key,
       payload?: Events[keyof Events]
     ): void {
       ;((events.get(event) || []) as EventHandlerList<Events[keyof Events]>)
@@ -65,4 +77,6 @@ export function createEmitter<
         .map(handler => handler(event, payload))
     }
   }
+
+  return emitter
 }

@@ -82,21 +82,39 @@ test('* event', () => {
   expect(handler1).toBeCalledTimes(2)
 })
 
+test('once event', () => {
+  const handler1 = jest.fn()
+
+  const emitter = createEmitter<{ foo: string }>()
+  emitter.once('foo', handler1)
+  emitter.emit('foo', 'hello')
+  emitter.emit('foo', 'hello')
+
+  expect(handler1).toBeCalledTimes(1)
+})
+
 test('events', () => {
+  enum NamespaceEvents {
+    NAME1_EVENT1 = 'name1:event1'
+  }
+
   const handler1 = jest.fn()
   const handler2 = jest.fn()
   const handler3 = jest.fn()
 
-  const emitter = createEmitter<{ foo: number; bar: string }>()
+  const emitter = createEmitter<{
+    foo: number
+    [NamespaceEvents.NAME1_EVENT1]: string
+  }>()
   emitter.on('foo', handler1)
-  emitter.on('bar', handler2)
+  emitter.on(NamespaceEvents.NAME1_EVENT1, handler2)
   emitter.on('*', handler3)
 
   expect(emitter.events.size).toEqual(3)
 
   emitter.events.clear()
   emitter.emit('foo', 'hello')
-  emitter.emit('bar', 1)
+  emitter.emit(NamespaceEvents.NAME1_EVENT1, 1)
 
   expect(handler1).not.toBeCalled()
   expect(handler2).not.toBeCalled()
