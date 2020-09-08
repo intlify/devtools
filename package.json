@@ -67,7 +67,7 @@
     "url": "git+https://github.com/intlify/intlify-devtools.git"
   },
   "scripts": {
-    "build": "lerna run build",
+    "build": "lerna run build --stream",
     "clean": "npm-run-all --parallel clean:*",
     "clean:caches": "jest --clearCache",
     "clean:node_modules": "lerna clean",
