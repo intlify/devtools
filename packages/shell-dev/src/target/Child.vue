@@ -5,12 +5,7 @@ import { useI18n } from 'vue-i18n'
 export default defineComponent({
   name: 'Child',
   setup() {
-    const { t, locale } = useI18n({
-      locale: 'en',
-      inheritLocale: true,
-      messages: {}
-    })
-    return { t, locale }
+    return { ...useI18n() }
   }
 })
 </script>

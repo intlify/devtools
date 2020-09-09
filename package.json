@@ -68,6 +68,7 @@
   },
   "scripts": {
     "build": "lerna run build --stream",
+    "watch": "lerna run build && lerna run watch --stream --no-sort --concurrency 99",
     "clean": "npm-run-all --parallel clean:*",
     "clean:caches": "jest --clearCache",
     "clean:node_modules": "lerna clean",

@@ -16,7 +16,7 @@ export function connectApp(app: App<Element>, shell: Shell): void {
 
     // TODO: here some logics
 
-    bridge.send('connnected')
+    bridge.send('connected')
   })
 }
 

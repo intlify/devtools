@@ -6,10 +6,12 @@ const i18n = createI18n({
   locale: 'en',
   messages: {
     en: {
-      hello: 'Hello Intlify DevTools!'
+      hello: 'Hello Intlify DevTools!',
+      language: 'Switch Languages'
     },
     ja: {
-      hello: 'こんにちは、Intlify 開発ツール!'
+      hello: 'こんにちは、Intlify 開発ツール!',
+      language: '言語切替'
     }
   }
 })

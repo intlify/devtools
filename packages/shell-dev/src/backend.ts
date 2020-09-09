@@ -1,4 +1,5 @@
 import { createBridge } from '@intlify-devtools/shared'
+import { setupBackend } from '@intlify-devtools/app-backend'
 
 const brdige = createBridge({
   listen(fn) {
@@ -10,4 +11,5 @@ const brdige = createBridge({
   }
 })
 
+setupBackend(brdige)
 console.log('load backend!', brdige)
