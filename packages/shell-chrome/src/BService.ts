@@ -12,9 +12,9 @@ let devtools: Devtools | null = null
 
 // eslint-disable-next-line @typescript-eslint/ban-types
 export async function add(a: number, b: number, cb: Function): number {
-  console.log('call add', a, b, cb, window)
+  console.log('[BService] call add', a, b, cb, window)
   const ret = await cb('backend!')
-  console.log('cb ret', ret)
+  console.log('[BService] cb ret', ret)
   return a + b
 }
 
@@ -23,7 +23,7 @@ export function send(msg: string): void {
 }
 
 export function registerDevtools(dev: Devtools): void {
-  console.log('registerDevtools!', dev)
+  console.log('[BService] registerDevtools!', dev)
   devtools = dev
 }
 
