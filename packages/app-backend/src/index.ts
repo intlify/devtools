@@ -10,7 +10,7 @@ console.log('app back-end!')
  *
  * @param bridge - A {@link Bridge}
  */
-export function setupBackend(bridge: Bridge): void {
+export function setupBackend(bridge: unknown): void {
   console.log('setupBackend!')
   // TODO:
 }

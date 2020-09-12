@@ -25,5 +25,9 @@
   },
   "scripts": {
     "build": "ts-node ./scripts/build.ts "
+  },
+  "dependencies": {
+    "comlink": "^4.3.0",
+    "comlink-extension": "^1.0.8"
   }
 }

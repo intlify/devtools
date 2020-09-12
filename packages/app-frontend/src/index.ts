@@ -5,8 +5,8 @@ const app = createApp()
 app.mount('#app')
 
 export interface Shell {
-  connect(fn: (bridge: Bridge) => void): void
-  onReload(fn: (bridge?: Bridge) => void): void
+  connect(fn: (bridge: any, app: any) => void): void
+  onReload(fn: (bridge?: any) => void): void
 }
 
 export function setupDevtools(shell: Shell): void {
@@ -19,7 +19,7 @@ export function setupDevtools(shell: Shell): void {
     if (isChrome) {
       app.config.errorHandler = undefined
     }
-    bridge?.events.clear()
+    // bridge?.events.clear()
 
     connectApp(app, shell)
   })

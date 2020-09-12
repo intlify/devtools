@@ -9,18 +9,19 @@ export function createApp(): App<Element> {
 }
 
 export function connectApp(app: App<Element>, shell: Shell): void {
-  shell.connect(async (bridge: Bridge) => {
+  shell.connect(async (bridge: any, devtools: any) => {
     if (isChrome) {
-      setupErrorHandler(app, bridge)
+      // setupErrorHandler(app, bridge)
     }
 
     // TODO: here some logics
 
-    bridge.send('connected')
+    devtools.setApp(app)
+    await bridge.send('connected')
   })
 }
 
-function setupErrorHandler(app: App<Element>, bridge: Bridge): void {
+function setupErrorHandler(app: App<Element>, bridge: any): void {
   app.config.errorHandler = (
     err: unknown,
     instance: ComponentPublicInstance | null,
