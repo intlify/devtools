@@ -6,6 +6,7 @@ import {
   forward
 } from 'comlink-extension'
 import * as BService from './BService'
+import { mod } from './FService'
 
 console.log('[background] load background!')
 
@@ -13,6 +14,20 @@ console.log('[background] load background!')
 browser.runtime.onConnect.addListener(port => {
   console.log('onConnect', port)
 })
+*/
+
+function callback(msg: string): string {
+  console.log('[background] add callback', msg, window)
+  return msg
+}
+/*
+const callbackProxy = Comlink.proxy(callback)
+console.log(
+  '[backend] add',
+  await bend.add(1, 3, callbackProxy),
+  window
+)
+await bend.registerDevtools(Comlink.proxy(mod))
 */
 
 type PipeLine = {
@@ -28,7 +43,6 @@ browser.runtime.onConnect.addListener(port => {
     return
   }
 
-  /*
   let tab = ''
   let name = ''
   if (isNumeric(port.name)) {
@@ -52,9 +66,16 @@ browser.runtime.onConnect.addListener(port => {
     // @ts-ignore TODO:
     pipeTwoway(tab, ports.get(tab)?.devtools, ports.get(tab)?.backend)
   }
-  */
 
-  Comlink.expose(BService, createBackgroundEndpoint(port))
+  /*
+  // Comlink.expose(BService, createBackgroundEndpoint(port))
+  Comlink.expose(mod, createBackgroundEndpoint(port))
+
+  setInterval(async () => {
+    const ret = await mod.requestElementTag(new Date().getTime())
+    console.log('[background] requestElementTag -> ', ret)
+  }, 5000)
+  */
 })
 
 function isNumeric(str: string): boolean {

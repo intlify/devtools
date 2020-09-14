@@ -2,13 +2,13 @@
 // import { createEndpoint, forward } from 'comlink-extension'
 import * as Comlink from 'comlink'
 // import * as BService from './BService'
-import { BService } from './BService'
-import { mod } from './FService'
+import { mod } from './BService'
+import { Devtools } from './FService'
 
 console.log('load backend!', window)
 
 function callback(msg: string): string {
-  console.log('[backend] add callback', msg, window)
+  console.log('[backend] in callback', msg, window)
   return msg
 }
 
@@ -48,16 +48,12 @@ async function handshake(e: MessageEvent) {
       contentPort.start()
       const fn = async (e: MessageEvent) => {
         if (e.data?.payload === 'expose') {
-          const bend = Comlink.wrap<BService>(contentPort)
-          console.log('[backend] bend', bend)
-          await bend.send('heheheheh')
-          const callbackProxy = Comlink.proxy(callback)
+          const fend = Comlink.wrap<Devtools>(contentPort)
+          console.log('[backend] fend', fend)
+          await fend.setBackend(Comlink.proxy(mod))
           console.log(
-            '[backend] add',
-            await bend.add(1, 3, callbackProxy),
-            window
+            `[backend] expand ${await fend.expand(1, Comlink.proxy(callback))}`
           )
-          await bend.registerDevtools(Comlink.proxy(mod))
           contentPort.postMessage({ payload: 'done' })
           contentPort.removeEventListener('message', fn)
         }

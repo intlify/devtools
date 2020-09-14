@@ -6,6 +6,7 @@ export interface BService {
   send(msg: string): void
   registerDevtools(dev: Devtools): void
   highlight(id: number): void
+  getElementTag(id: number): string
 }
 
 let devtools: Devtools | null = null
@@ -32,6 +33,11 @@ export function highlight(id: number, loc = ''): void {
   devtools?.inspect(`inspect ${id} !`)
 }
 
+export function getElementTag(id: number): string {
+  console.log(`[BService] getElementTag: component id: ${id}`)
+  return 'p'
+}
+
 // const btn = document.getElementById('button1')
 // btn?.addEventListener('click', ev => {
 //   highlight(ev.timeStamp)
@@ -40,3 +46,11 @@ export function highlight(id: number, loc = ''): void {
 // window.addEventListener('mousemove', ev => {
 //   highlight(ev.x)
 // })
+
+export const mod = {
+  send,
+  add,
+  registerDevtools,
+  highlight,
+  getElementTag
+}
