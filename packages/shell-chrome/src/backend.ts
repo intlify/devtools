@@ -45,7 +45,6 @@ async function handshake(e: MessageEvent) {
     const contentPort = e.ports[0]
     if (contentPort) {
       window.removeEventListener('message', handshake)
-      contentPort.start()
       const fn = async (e: MessageEvent) => {
         if (e.data?.payload === 'expose') {
           const fend = Comlink.wrap<Devtools>(contentPort)
@@ -55,10 +54,14 @@ async function handshake(e: MessageEvent) {
             `[backend] expand ${await fend.expand(1, Comlink.proxy(callback))}`
           )
           contentPort.postMessage({ payload: 'done' })
+          // setInterval(async () => {
+          //   await fend.expand(new Date().getTime())
+          // }, 5000)
           contentPort.removeEventListener('message', fn)
         }
       }
       contentPort.addEventListener('message', fn)
+      contentPort.start()
       contentPort.postMessage({ payload: 'start' })
     }
   } else {

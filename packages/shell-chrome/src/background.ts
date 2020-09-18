@@ -1,10 +1,11 @@
 import { Runtime, browser } from 'webextension-polyfill-ts'
 import * as Comlink from 'comlink'
-import {
-  createBackgroundEndpoint,
-  isMessagePort,
-  forward
-} from 'comlink-extension'
+// import {
+//   createBackgroundEndpoint,
+//   isMessagePort,
+//   forward
+// } from 'comlink-extension'
+import { createBackgroundEndpoint, isMessagePort, forward } from './comlink-ext'
 import * as BService from './BService'
 import { mod } from './FService'
 
@@ -43,6 +44,7 @@ browser.runtime.onConnect.addListener(port => {
     return
   }
 
+  /*
   let tab = ''
   let name = ''
   if (isNumeric(port.name)) {
@@ -66,16 +68,16 @@ browser.runtime.onConnect.addListener(port => {
     // @ts-ignore TODO:
     pipeTwoway(tab, ports.get(tab)?.devtools, ports.get(tab)?.backend)
   }
+  */
 
-  /*
   // Comlink.expose(BService, createBackgroundEndpoint(port))
+  console.log('expors !!')
   Comlink.expose(mod, createBackgroundEndpoint(port))
 
-  setInterval(async () => {
-    const ret = await mod.requestElementTag(new Date().getTime())
-    console.log('[background] requestElementTag -> ', ret)
-  }, 5000)
-  */
+  // setInterval(async () => {
+  //   const ret = await mod.requestElementTag(new Date().getTime())
+  //   console.log('[background] requestElementTag -> ', ret)
+  // }, 5000)
 })
 
 function isNumeric(str: string): boolean {

@@ -1,7 +1,9 @@
 import { browser } from 'webextension-polyfill-ts'
 import * as Comlink from 'comlink'
-import { createEndpoint, forward } from 'comlink-extension'
+// import { createEndpoint, forward } from 'comlink-extension'
+import { forward, createEndpoint } from './comlink-ext'
 import * as BService from './BService'
+import { mod } from './FService'
 
 console.log('load hook!', window)
 
@@ -39,8 +41,11 @@ function onMessage(ev: MessageEvent) {
       window.removeEventListener('message', onMessage)
       console.log('[hook] port on message', e)
       if (e.data?.payload === 'start') {
-        // Comlink.expose(BService, port2)
-        forward(port2, browser.runtime.connect())
+        // Comlink.expose(mod, port2)
+        forward(
+          port2,
+          browser.runtime.connect({ name: 'intlify-devtools-content' })
+        )
         port2.postMessage({ payload: 'expose' })
       } else {
         port2.removeEventListener('message', fn)

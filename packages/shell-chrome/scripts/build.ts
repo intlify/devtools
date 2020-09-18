@@ -8,7 +8,17 @@ import { OutputChunk } from 'rollup'
     const entries = await fs.readdir(resolve(__dirname, '../src'))
     const chunks: OutputChunk[] = []
 
+    const ignores = [
+      'background-endpoint.ts',
+      'adapter.ts',
+      'comlink-ext.ts',
+      'BService.ts',
+      'FService.ts'
+    ]
     for (const entry of entries) {
+      if (ignores.includes(entry)) {
+        continue
+      }
       const { name } = parse(entry)
       const result = await build({
         outDir: resolve(__dirname, '../build'),
