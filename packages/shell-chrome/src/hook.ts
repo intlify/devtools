@@ -1,47 +1,24 @@
 /**
- * Hook module on chrome extensions, forked from the below:
+ * DevTools module on Chrome extensions, forked from the below:
  * - original repository url: https://github.com/vuejs/vue-devtools
  * - code url: https://github.com/vuejs/vue-devtools/blob/dev/packages/shell-chrome/src/hook.js
  * - author: Evan you (https://github.com/yyx990803)
  * - license: MIT
  */
 
-import { browser } from 'webextension-polyfill-ts'
+console.log('[hook] load hook!', window)
 
-console.log('load hook!', window)
-
-// TODO: should be implemented payload typingsa ...
-function sendMessageToBackend(payload: unknown) {
-  console.log('sendMessageToBackend: ', payload)
-  window.postMessage(
-    {
-      source: 'intlify-devtools-proxy',
-      payload: payload
-    },
-    '*'
-  )
+// TODO: should replace from @intlify-devtools/backend
+function installHook() {
+  console.log('[hook] install hook!')
 }
 
-function sendMessageToDevtools(e: MessageEvent) {
-  console.log('sendMessageToDevtools: ', e)
-  if (e.data && e.data.source === 'intlify-devtools-backend') {
-    port.postMessage(e.data.payload)
-  } else if (e.data && e.data.source === 'intlify-devtools-backend-injection') {
-    if (e.data.payload === 'listening') {
-      sendMessageToBackend('init')
-    }
-  }
-}
+// inject the hook
+if (document instanceof HTMLDocument) {
+  const source = ';(' + installHook.toString() + ')(window)'
 
-function handleDisconnect() {
-  console.log('handle Disconnect')
-  window.removeEventListener('message', sendMessageToDevtools)
-  sendMessageToBackend('shutdown')
+  const script = document.createElement('script')
+  script.textContent = source
+  document.documentElement.appendChild(script)
+  script.parentNode?.removeChild(script)
 }
-
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore NOTE: webextension-polyfill-ts unmatch typing ...
-const port = browser.runtime.connect({ name: 'content-script' })
-port.onMessage.addListener(sendMessageToBackend)
-window.addEventListener('message', sendMessageToDevtools)
-port.onDisconnect.addListener(handleDisconnect)

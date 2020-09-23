@@ -5,5 +5,5 @@ import { browser } from 'webextension-polyfill-ts'
     '',
     'devtools.html'
   )
-  console.log('created panel', panel)
+  console.log('[devtools-background] created panel', panel)
 })()

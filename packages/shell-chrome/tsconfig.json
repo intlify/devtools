@@ -1,8 +1,23 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
+    "target": "esnext",
+    "module": "es2015",
     "rootDir": "src",
-    "outDir": "build"
+    "outDir": "build",
+    "lib": ["es2020", "dom"]
   },
-  "include": ["src/**/*"]
+  "include": ["src/**/*"],
+  "exclude": ["node_modules"],
+  "references": [
+    {
+      "path": "../shared"
+    },
+    {
+      "path": "../app-backend"
+    },
+    {
+      "path": "../app-frontend"
+    }
+  ]
 }

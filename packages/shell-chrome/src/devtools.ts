@@ -7,18 +7,8 @@
  */
 
 import { browser } from 'webextension-polyfill-ts'
-
-type Foo = {
-  foo?: (msg: string) => void
-}
-
-const foo: Foo = {
-  foo(msg) {
-    console.log(msg)
-  }
-}
-
-foo.foo?.('foo devtools!')
+import { setupDevtools } from '@intlify-devtools/app-frontend'
+import { Bridge, createBridge } from '@intlify-devtools/shared'
 
 /**
  * Inject a globally evaluated script, in the same context with the actual user app.
@@ -36,13 +26,50 @@ function inejctScript(scriptName: string) {
 }
 
 /**
- * main of devtools module
+ * entry point of devtools
  */
 ;(async () => {
   try {
-    const ret = await inejctScript(browser.runtime.getURL('build/backend.js'))
-    console.log('inejct script', ret)
+    let bridge: Bridge
+
+    setupDevtools({
+      connect: async cb => {
+        // 1. inject backend code into page
+        await inejctScript(browser.runtime.getURL('build/backend.js'))
+
+        // 2. connect to background to setup proxy
+        // @ts-ignore
+        const port = browser.runtime.connect({
+          name: browser.devtools.inspectedWindow.tabId.toString()
+        })
+        let disconnected = false
+        port.onDisconnect.addListener(() => {
+          console.log('[devtools] disconnect!')
+          disconnected = true
+        })
+        bridge = createBridge({
+          listen: fn => {
+            port.onMessage.addListener(fn)
+          },
+          send: data => {
+            if (!disconnected) {
+              port.postMessage(data)
+            }
+          }
+        })
+
+        // 3. send a proxy API to the panel
+        cb(bridge)
+      },
+
+      onReload: cb => {
+        browser.devtools.network.onNavigated.addListener(url => {
+          console.log('[devtools] devtools.network.onNavigated', url)
+          cb(bridge)
+        })
+      }
+    })
   } catch (e) {
-    console.error(e)
+    console.error('[devtools]', e)
   }
 })()

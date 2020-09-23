@@ -1,5 +1,5 @@
-console.log('load detector!')
+console.log('[detector] load detector!')
 
 window.addEventListener('message', (e: MessageEvent) => {
-  console.log('recive on mesasge', e)
+  console.log('[detector] receive on mesasge', e)
 })
