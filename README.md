@@ -1,5 +1,7 @@
 # @intlify/devtools
 
+:gear: i18n devtools for debugging Intlify applications
+
 WIP
 
 ## :copyright: License
