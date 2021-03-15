@@ -76,8 +76,8 @@
     "clean:deps:devtools": "cd packages/devtools && rm -rf node_modules",
     "clean:deps:shell-dev": "cd packages/shell-dev && rm -rf node_modules",
     "clean:deps:vite-plugin": "cd packages/vite-plugin-intlify-devtools && rm -rf node_modules && rm -rf tsconfig.tsbuildinfo",
-    "dev": "concurrently -c 'blue.bold,magenta.bold' 'npm:dev:devtools' 'npm:dev:shell-dev'",
-    "dev:devtools": "cd packages/devtools&& yarn dev",
+    "dev": "concurrently -c 'blue.bold,magenta.bold' 'npm:serve:devtools' 'npm:dev:shell-dev'",
+    "dev:devtools": "cd packages/devtools && yarn dev",
     "dev:shell-dev": "cd packages/shell-dev && yarn dev",
     "fix": "npm-run-all --parallel lint:fix format:fix",
     "format:fix": "npm-run-all --parallel \"format:prettier --write\" format:package",
@@ -89,6 +89,7 @@
     "preinstall": "node ./scripts/checkYarn.js",
     "release:prepare": "shipjs prepare",
     "release:trigger": "shipjs trigger",
+    "serve:devtools": "cd packages/devtools && yarn serve",
     "test": "echo 'run test!'",
     "watch": "cd packages/vite-plugin-intlify-devtools && yarn watch"
   },

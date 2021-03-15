@@ -27,10 +27,10 @@ export default defineConfig({
   server: {
     proxy: {
       '/frontend': {
-        target: 'http://localhost:3100',
+        target: 'http://localhost:5000',
         changeOrigin: true,
-        rewrite: path => path.replace(/^\/frontend/, '/src/main.ts')
-        // rewrite: path => path.replace(/^\/frontend/, '/devtools.es.js')
+        // rewrite: path => path.replace(/^\/frontend/, '/src/main.ts')
+        rewrite: path => path.replace(/^\/frontend/, '/devtools.es.js')
       }
     }
   }

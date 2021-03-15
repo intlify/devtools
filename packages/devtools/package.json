@@ -13,19 +13,19 @@
   },
   "exports": {
     ".": {
-      "import": "dist/intlify-devtools.es.js",
-      "require": "dist/intlify-devtools.umd.js"
+      "import": "dist/devtools.es.js",
+      "require": "dist/devtools.umd.js"
     }
   },
   "files": [
-    "dist/intlify-devtools.es.js",
-    "dist/intlify-devtools.umd.js",
+    "dist/devtools.es.js",
+    "dist/devtools.umd.js",
     "dist/styles.css"
   ],
   "homepage": "https://github.com/intlify/devtools/tree/master/packages/devtools#readme",
-  "jsdelivr": "dist/intilfy-devtools.umd.js",
-  "main": "dist/intlify-devtools.umd.js",
-  "module": "dist/intlify-devtools.es.js",
+  "jsdelivr": "dist/devtools.umd.js",
+  "main": "dist/devtools.umd.js",
+  "module": "dist/devtools.es.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/intlify/devtools.git",
@@ -38,5 +38,5 @@
     "serve": "vite preview"
   },
   "sideEffects": false,
-  "unpkg": "dist/intlify-devtools.umd.js"
+  "unpkg": "dist/devtools.umd.js"
 }
