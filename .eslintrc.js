@@ -1,16 +1,23 @@
+'use strict'
+
 module.exports = {
   root: true,
-  globals: {},
+  globals: {
+    page: true,
+    browser: true,
+    context: true
+  },
   env: {
     node: true,
     jest: true
   },
   extends: [
     'plugin:vue-libs/recommended',
+    'plugin:vue/vue3-recommended',
     'plugin:@typescript-eslint/recommended',
     'plugin:@typescript-eslint/eslint-recommended',
     'plugin:prettier/recommended',
-    'prettier/@typescript-eslint'
+    'prettier'
   ],
   plugins: ['@typescript-eslint'],
   parser: 'vue-eslint-parser',
@@ -19,6 +26,8 @@ module.exports = {
     sourceType: 'module'
   },
   rules: {
-    '@typescript-eslint/ban-ts-comment': 'off'
+    'object-curly-spacing': 'off',
+    'vue/valid-template-root': 'off',
+    'vue/no-multiple-template-root': 'off'
   }
 }

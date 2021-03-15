@@ -1,3 +1,6 @@
-tsconfig.base.json
+lib
 coverage
-build
+tsconfig.json
+packages/**/tsconfig.json
+dist
+packages/**/dist

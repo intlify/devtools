@@ -1,38 +1,22 @@
 {
   "name": "@intlify-devtools/shell-dev",
-  "description": "Development shell package for intlify-devtools",
   "version": "0.0.0",
-  "author": {
-    "name": "kazuya kawaguchi",
-    "email": "kawakazu80@gmail.com"
-  },
-  "bugs": {
-    "url": "https://github.com/intlify/intlify-devtools/issues"
-  },
   "dependencies": {
-    "@intlify-devtools/app-backend": "^0.0.0",
-    "@intlify-devtools/app-frontend": "^0.0.0",
-    "@intlify-devtools/shared": "^0.0.0",
-    "core-js": "^3.6.5",
-    "vue": "3.0.0",
-    "vue-i18n": "^9.0.0-beta.2"
+    "vue": "^3.0.5",
+    "vue-i18n": "^9.0.0"
   },
   "devDependencies": {
-    "@intlify-devtools/webpack-config": "^0.0.0",
-    "webpack": "^4.44.1",
-    "webpack-cli": "^3.3.12",
-    "webpack-dev-server": "^3.11.0"
+    "@intlify-devtools/vite-plugin": "0.0.0",
+    "@intlify/vite-plugin-vue-i18n": "^2.0.2"
   },
-  "homepage": "https://github.com/intlify/intlify-devtools/tree/master/packages/shell-dev#readme",
-  "license": "MIT",
+  "engines": {
+    "node": ">= 12"
+  },
   "private": true,
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/intlify/intlify-devtools.git"
-  },
   "scripts": {
-    "build": "webpack",
-    "clean": "rimraf build",
-    "dev": "webpack-dev-server"
+    "build": "vite build",
+    "dev": "vite",
+    "lint": "vuedx-typecheck .",
+    "serve": "vite preview"
   }
 }

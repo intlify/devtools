@@ -1,5 +1,4 @@
-jest.config.js
-webpack.config.js
-packages/webpack-config/config.js
+dist
 lib
-build
+./jest.config.js
+./test/fixtures

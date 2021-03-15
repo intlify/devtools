@@ -1,0 +1,20 @@
+{
+  "name": "@intlify-devtools/frontend-libs",
+  "version": "0.0.0",
+  "bugs": {
+    "url": "https://github.com/intlify/devtools/issues"
+  },
+  "dependencies": {
+    "vue": "^3.0.5"
+  },
+  "engines": {
+    "node": ">= 12"
+  },
+  "homepage": "https://github.com/intlify/devtools/tree/master/packages/frontend-libs#readme",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/intlify/devtools.git",
+    "directory": "packages/frontend-libs"
+  }
+}

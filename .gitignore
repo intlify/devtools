@@ -1,13 +1,10 @@
-dist
-node_modules
 .DS_Store
-.idea
 .vscode
 coverage
-build
-*.tsbuildinfo
-lib
-# jest dump files
+node_modules
+dist
+dist-ssr
+*.local
 *.log
 *.swp
 *~

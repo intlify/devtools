@@ -1,0 +1,39 @@
+{
+  "name": "@intlify-devtools/vite-plugin",
+  "description": "vite plugin",
+  "version": "0.0.0",
+  "author": {
+    "name": "kazuya kawaguchi",
+    "email": "kawakazu80@gmail.com"
+  },
+  "bugs": {
+    "url": "https://github.com/intlify/devtools/issues"
+  },
+  "dependencies": {
+    "debug": "^4.3.0"
+  },
+  "devDependencies": {
+    "@types/debug": "^4.1.5",
+    "@types/node": "^14.14.10"
+  },
+  "engines": {
+    "node": ">= 12"
+  },
+  "files": [
+    "dist"
+  ],
+  "homepage": "https://github.com/intlify/devtools/tree/main/packages/vite-plugin#readme",
+  "license": "MIT",
+  "main": "lib/index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/intlify/devtools.git",
+    "directory": "packages/vite-plugin"
+  },
+  "scripts": {
+    "build": "tsc -b",
+    "clean": "rm -rf lib/*.* tsconfig.tsbuildinfo",
+    "watch": "tsc -b --watch"
+  },
+  "types": "lib/index.d.ts"
+}
