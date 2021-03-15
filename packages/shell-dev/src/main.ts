@@ -1,17 +1,20 @@
 import { createApp } from 'vue'
 import App from './App.vue'
-import {
-  Foo,
-  APP_FRONTNED,
-  App as FrontApp
-} from 'http://localhost:3000/frontend'
-
-console.log(
-  'load app-frontend via script tag at host',
-  Foo,
-  APP_FRONTNED,
-  FrontApp
-)
 
 console.log('shell-dev: App', App)
-createApp(App).mount('#app')
+
+const app = createApp(App)
+app.mixin({
+  mounted() {
+    if (this._ && this._.type && this._.type.__INTLIFY_META__ && this.$el) {
+      if (this.$el.nodeType === 3) {
+        // text node (fragmenet)
+        this.$el.__INTLIFY_META__ = this._.type.__INTLIFY_META__
+      } else {
+        this.$el.setAttribute('data-intlify', this._.type.__INTLIFY_META__)
+        this.$el.__INTLIFY_META__ = this._.type.__INTLIFY_META__
+      }
+    }
+  }
+})
+app.mount('#app')

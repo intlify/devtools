@@ -1,5 +1,5 @@
 {
-  "name": "intlify-devtools",
+  "name": "devtools",
   "description": "i18n devtools for debugging Intlify applications",
   "version": "0.0.0",
   "author": {
@@ -68,16 +68,16 @@
     "url": "git+https://github.com/intlify/devtools.git"
   },
   "scripts": {
-    "build": "yarn build:vite-plugin && yarn build:frontend",
-    "build:frontend": "cd packages/frontend && yarn build",
+    "build": "yarn build:vite-plugin && yarn build:devtools && yarn build:shell-dev",
+    "build:devtools": "cd packages/devtools && yarn build",
     "build:shell-dev": "cd packages/shell-dev && yarn build",
-    "build:vite-plugin": "cd packages/vite-plugin && yarn build",
+    "build:vite-plugin": "cd packages/vite-plugin-intlify-devtools && yarn build",
     "clean:deps": "npm-run-all --parallel clean:deps:*",
-    "clean:deps:frontend": "cd packages/frontend && rm -rf node_modules",
+    "clean:deps:devtools": "cd packages/devtools && rm -rf node_modules",
     "clean:deps:shell-dev": "cd packages/shell-dev && rm -rf node_modules",
-    "clean:deps:vite-plugin": "cd packages/vite-plugin && rm -rf node_modules && rm -rf tsconfig.tsbuildinfo",
-    "dev": "concurrently -c 'blue.bold,magenta.bold' 'npm:dev:frontend' 'npm:dev:shell-dev'",
-    "dev:frontend": "cd packages/frontend && yarn dev",
+    "clean:deps:vite-plugin": "cd packages/vite-plugin-intlify-devtools && rm -rf node_modules && rm -rf tsconfig.tsbuildinfo",
+    "dev": "concurrently -c 'blue.bold,magenta.bold' 'npm:dev:devtools' 'npm:dev:shell-dev'",
+    "dev:devtools": "cd packages/devtools&& yarn dev",
     "dev:shell-dev": "cd packages/shell-dev && yarn dev",
     "fix": "npm-run-all --parallel lint:fix format:fix",
     "format:fix": "npm-run-all --parallel \"format:prettier --write\" format:package",
@@ -90,7 +90,7 @@
     "release:prepare": "shipjs prepare",
     "release:trigger": "shipjs trigger",
     "test": "echo 'run test!'",
-    "watch": "cd packages/vite-plugin && yarn watch"
+    "watch": "cd packages/vite-plugin-intlify-devtools && yarn watch"
   },
   "workspaces": [
     "packages/*"

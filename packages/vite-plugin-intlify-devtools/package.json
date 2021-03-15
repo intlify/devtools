@@ -1,5 +1,5 @@
 {
-  "name": "@intlify-devtools/vite-plugin",
+  "name": "vite-plugin-intlify-devtools",
   "description": "vite plugin",
   "version": "0.0.0",
   "author": {
@@ -22,13 +22,13 @@
   "files": [
     "dist"
   ],
-  "homepage": "https://github.com/intlify/devtools/tree/main/packages/vite-plugin#readme",
+  "homepage": "https://github.com/intlify/devtools/tree/main/packages/vite-plugin-intlify-devtools#readme",
   "license": "MIT",
   "main": "lib/index.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/intlify/devtools.git",
-    "directory": "packages/vite-plugin"
+    "directory": "packages/vite-plugin-intlify-devtools"
   },
   "scripts": {
     "build": "tsc -b",

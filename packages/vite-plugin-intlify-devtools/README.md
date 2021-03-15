@@ -1,4 +1,4 @@
-# @intlify-devtools/frontend
+# vite-plugin-intlify-devtools
 
 ## :copyright: License
 

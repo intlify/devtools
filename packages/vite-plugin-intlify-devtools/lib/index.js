@@ -2,28 +2,33 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.intlify = void 0;
 const debug_1 = require("debug");
-const debug = debug_1.debug('vite-plugin-intlify');
+const debug = debug_1.debug('vite-plugin-intlify-devtools');
 function plugin(options = {
-    foo: 'test'
+    devtools: 'https://unpkg.com/@intlify/devtools@next'
 }) {
     debug('plugin options:', options);
+    const env = process.env.NODE_ENV || 'development';
     return {
-        name: 'vite-plugin-intlify',
+        name: 'vite-plugin-intlify-devtools',
         config(config) {
             debug('config', config);
         },
         configResolved(_config) {
             debug('configResolve', _config);
         },
-        async transformIndexHtml(html, { path, filename, bundle, chunk }) {
-            debug('transformIndexHtml', html, path, filename, bundle, chunk);
+        async transformIndexHtml(html, { path, filename }) {
+            debug('transformIndexHtml', html, path, filename);
+            if (env !== 'development') {
+                return undefined;
+            }
             return {
                 html,
                 tags: [
                     {
                         tag: 'script',
                         attrs: {
-                            src: '/foo.js'
+                            type: 'module',
+                            src: options.devtools
                         },
                         injectTo: 'head-prepend'
                     }

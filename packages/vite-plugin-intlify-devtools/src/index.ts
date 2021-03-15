@@ -2,21 +2,23 @@ import { debug as Debug } from 'debug'
 
 import type { Plugin, ResolvedConfig, UserConfig } from 'vite'
 
-const debug = Debug('vite-plugin-intlify')
+const debug = Debug('vite-plugin-intlify-devtools')
 
 export type Options = {
-  foo: string
+  devtools?: string
 }
 
 function plugin(
   options: Options = {
-    foo: 'test'
+    devtools: 'https://unpkg.com/@intlify/devtools@next'
   }
 ): Plugin {
   debug('plugin options:', options)
 
+  const env = process.env.NODE_ENV || 'development'
+
   return {
-    name: 'vite-plugin-intlify',
+    name: 'vite-plugin-intlify-devtools',
 
     config(config: UserConfig) {
       debug('config', config)
@@ -26,15 +28,20 @@ function plugin(
       debug('configResolve', _config)
     },
 
-    async transformIndexHtml(html: string, { path, filename, bundle, chunk }) {
-      debug('transformIndexHtml', html, path, filename, bundle, chunk)
+    async transformIndexHtml(html: string, { path, filename }) {
+      debug('transformIndexHtml', html, path, filename)
+      if (env !== 'development') {
+        return undefined
+      }
+
       return {
         html,
         tags: [
           {
             tag: 'script',
             attrs: {
-              src: '/foo.js'
+              type: 'module',
+              src: options.devtools
             },
             injectTo: 'head-prepend'
           }

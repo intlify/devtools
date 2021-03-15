@@ -1,11 +1,10 @@
 {
-  "name": "@intlify-devtools/frontend",
+  "name": "@intlify/devtools",
   "version": "0.0.0",
   "bugs": {
     "url": "https://github.com/intlify/devtools/issues"
   },
   "dependencies": {
-    "@intlify-devtools/frontend-libs": "0.0.0",
     "vue": "^3.0.5"
   },
   "devDependencies": {},
@@ -14,23 +13,23 @@
   },
   "exports": {
     ".": {
-      "import": "dist/frontend.es.js",
-      "require": "dist/frontend.umd.js"
+      "import": "dist/intlify-devtools.es.js",
+      "require": "dist/intlify-devtools.umd.js"
     }
   },
   "files": [
-    "dist/frontend.es.js",
-    "dist/frontend.umd.js",
+    "dist/intlify-devtools.es.js",
+    "dist/intlify-devtools.umd.js",
     "dist/styles.css"
   ],
-  "homepage": "https://github.com/intlify/devtools/tree/master/packages/frontend#readme",
-  "jsdelivr": "dist/frontend.umd.js",
-  "main": "dist/frontend.umd.js",
-  "module": "dist/frontend.es.js",
+  "homepage": "https://github.com/intlify/devtools/tree/master/packages/devtools#readme",
+  "jsdelivr": "dist/intilfy-devtools.umd.js",
+  "main": "dist/intlify-devtools.umd.js",
+  "module": "dist/intlify-devtools.es.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/intlify/devtools.git",
-    "directory": "packages/frontend"
+    "directory": "packages/devtools"
   },
   "scripts": {
     "build": "vite build",
@@ -39,5 +38,5 @@
     "serve": "vite preview"
   },
   "sideEffects": false,
-  "unpkg": "dist/frontend.umd.js"
+  "unpkg": "dist/intlify-devtools.umd.js"
 }

@@ -5,8 +5,7 @@
 
 <script setup lang="ts">
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { defineComponent } from 'vue'
-import { HelloWorld } from 'http://localhost:3000/frontend'
+import HelloWorld from './components/HelloWorld.vue'
 /* eslint-enable @typescript-eslint/no-unused-vars */
 </script>
 

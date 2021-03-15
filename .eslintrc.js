@@ -28,6 +28,7 @@ module.exports = {
   rules: {
     'object-curly-spacing': 'off',
     'vue/valid-template-root': 'off',
-    'vue/no-multiple-template-root': 'off'
+    'vue/no-multiple-template-root': 'off',
+    '@typescript-eslint/ban-ts-comment': 'off'
   }
 }

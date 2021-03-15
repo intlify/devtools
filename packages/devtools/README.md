@@ -1,4 +1,4 @@
-# @intlify-devtools/vite-plugin
+# @intlify/devtools
 
 ## :copyright: License
 

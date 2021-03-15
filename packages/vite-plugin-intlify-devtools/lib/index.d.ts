@@ -1,6 +1,6 @@
 import type { Plugin } from 'vite';
 export declare type Options = {
-    foo: string;
+    devtools?: string;
 };
 declare function plugin(options?: Options): Plugin;
 export default plugin;

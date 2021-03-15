@@ -1,4 +1,4 @@
-# @intlify/devtools
+# devtools
 
 :gear: i18n devtools for debugging Intlify applications
 
