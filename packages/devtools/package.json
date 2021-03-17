@@ -5,9 +5,10 @@
     "url": "https://github.com/intlify/devtools/issues"
   },
   "dependencies": {
+    "@intlify-devtools/shared": "0.0.0",
+    "@mizchi/worker-dom": "^0.25.1",
     "vue": "^3.0.5"
   },
-  "devDependencies": {},
   "engines": {
     "node": ">= 12"
   },

@@ -24,7 +24,9 @@
     }
   },
   "devDependencies": {
+    "@intlify/vite-plugin-vue-i18n": "^2.0.2",
     "@types/jest": "^26.0.20",
+    "@types/node": "^14.14.10",
     "@typescript-eslint/eslint-plugin": "^4.17.0",
     "@typescript-eslint/parser": "^4.17.0",
     "@vitejs/plugin-vue": "^1.1.2",
@@ -68,12 +70,14 @@
     "url": "git+https://github.com/intlify/devtools.git"
   },
   "scripts": {
-    "build": "yarn build:vite-plugin && yarn build:devtools && yarn build:shell-dev",
+    "build": "yarn build:shared && yarn build:vite-plugin && yarn build:devtools && yarn build:shell-dev",
     "build:devtools": "cd packages/devtools && yarn build",
+    "build:shared": "cd packages/shared && yarn build",
     "build:shell-dev": "cd packages/shell-dev && yarn build",
     "build:vite-plugin": "cd packages/vite-plugin-intlify-devtools && yarn build",
     "clean:deps": "npm-run-all --parallel clean:deps:*",
     "clean:deps:devtools": "cd packages/devtools && rm -rf node_modules",
+    "clean:deps:shared": "cd packages/shared && rm -rf node_modules && rm -rf tsconfig.tsbuildinfo",
     "clean:deps:shell-dev": "cd packages/shell-dev && rm -rf node_modules",
     "clean:deps:vite-plugin": "cd packages/vite-plugin-intlify-devtools && rm -rf node_modules && rm -rf tsconfig.tsbuildinfo",
     "dev": "concurrently -c 'blue.bold,magenta.bold' 'npm:serve:devtools' 'npm:dev:shell-dev'",
@@ -91,7 +95,9 @@
     "release:trigger": "shipjs trigger",
     "serve:devtools": "cd packages/devtools && yarn serve",
     "test": "echo 'run test!'",
-    "watch": "cd packages/vite-plugin-intlify-devtools && yarn watch"
+    "watch": "concurrently -c 'blue.bold,magenta.bold' 'npm:watch:shared' 'npm:watch:vite-plugin'",
+    "watch:shared": "cd packages/shared && yarn watch",
+    "watch:vite-plugin": "cd packages/vite-plugin-intlify-devtools && yarn watch"
   },
   "workspaces": [
     "packages/*"

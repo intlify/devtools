@@ -6,7 +6,7 @@ const CRYPT_ALGO = 'aes-256-cbc'
  * Generate the random passprase
  * @returns {string} A random passphrase with base64
  */
-export function randomPass() {
+export function randomPass(): string {
   return crypto.randomBytes(32).toString('base64')
 }
 
@@ -14,7 +14,7 @@ export function randomPass() {
  * Generate the random salt
  * @returns {string} A random salt with base64
  */
-export function randomSalt() {
+export function randomSalt(): string {
   return crypto.randomBytes(16).toString('base64')
 }
 
@@ -24,7 +24,7 @@ export function randomSalt() {
  * @param {string} salt 16 byte salt
  * @returns {string} secrent hash key
  */
-export function generateSecret(pass, salt) {
+export function generateSecret(pass: string, salt: string): string {
   pass = pass || randomPass()
   salt = salt || randomSalt()
   return crypto.scryptSync(pass, salt, 32).toString('hex')
@@ -36,7 +36,7 @@ export function generateSecret(pass, salt) {
  * @param {string} data A target data
  * @returns {Object} An IV and encryped data that these are encdoed with base64
  */
-export function encrypt(secret, data) {
+export function encrypt(secret: string, data: string): { iv: string, encryptedData: string } {
   // secret key from buffer
   const key = Buffer.from(secret, 'hex')
   // generate IV
@@ -56,7 +56,7 @@ export function encrypt(secret, data) {
  * @param {string} encryptedData An encrypted data that encoded with base64
  * @returns {string} The decrypted data
  */
-export function decrypt(secret, iv, encryptedData) {
+export function decrypt(secret: string, iv: string, encryptedData: string): string {
   // secret key from buffer
   const key = Buffer.from(secret, 'hex')
   // IV from buffer

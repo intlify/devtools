@@ -1,6 +1,6 @@
 {
-  "name": "vite-plugin-intlify-devtools",
-  "description": "vite plugin for intlify devtools",
+  "name": "@intlify-devtools/shared",
+  "description": "shared library for intlify devtools",
   "version": "0.0.0",
   "author": {
     "name": "kazuya kawaguchi",
@@ -9,25 +9,20 @@
   "bugs": {
     "url": "https://github.com/intlify/devtools/issues"
   },
-  "dependencies": {
-    "debug": "^4.3.0"
-  },
-  "devDependencies": {
-    "@types/debug": "^4.1.5"
-  },
   "engines": {
     "node": ">= 12"
   },
   "files": [
     "dist"
   ],
-  "homepage": "https://github.com/intlify/devtools/tree/main/packages/vite-plugin-intlify-devtools#readme",
+  "homepage": "https://github.com/intlify/devtools/tree/main/packages/shared#readme",
   "license": "MIT",
   "main": "lib/index.js",
+  "private": true,
   "repository": {
     "type": "git",
     "url": "git+https://github.com/intlify/devtools.git",
-    "directory": "packages/vite-plugin-intlify-devtools"
+    "directory": "packages/shared"
   },
   "scripts": {
     "build": "tsc -b",

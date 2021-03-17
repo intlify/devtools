@@ -3,7 +3,7 @@ import vue from '@vitejs/plugin-vue'
 import vueI18n from '@intlify/vite-plugin-vue-i18n'
 import intlifyVue from '@intlify/vite-plugin-vue-i18n/lib/injection'
 import intlify from 'vite-plugin-intlify-devtools'
-import { generateSecret, encrypt, decrypt } from './crypt'
+import { generateSecret, encrypt } from '@intlify-devtools/shared'
 
 // @ts-ignore
 const secret = generateSecret()
@@ -16,7 +16,6 @@ export default defineConfig({
     intlifyVue({
       __INTLIFY_META__: (a1, a2) => {
         const { iv, encryptedData } = encrypt(secret, a1)
-        console.log('intlifyvue', a1, iv, encryptedData)
         return `${iv}$${encryptedData}`
       }
     }),
