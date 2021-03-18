@@ -1,5 +1,5 @@
 import { Component, createApp, nextTick } from 'vue'
-import { attachWorker } from '@mizchi/worker-dom/dist/lib/main'
+import { attachWorker } from '@intlify/worker-dom/dist/lib/main'
 import DOMWorker from './worker?worker'
 import App from './App.vue'
 
@@ -25,13 +25,10 @@ function mount(Entry: Component, el?: string) {
       }
     })
     app.mount(el)
-    nextTick(() => {
-      const worker = new DOMWorker()
-      attachWorker(document.getElementById('app'), worker)
-      worker.addEventListener('message', e => {
-        console.log('onmeessage', e)
-      })
-      // worker.postMessage('foo')
+    nextTick(async () => {
+      const worker = await attachWorker(document.getElementById('app'), new DOMWorker())
+      const ret = await worker.callFunction('foo', 'f')
+      console.log('ret', ret)
     })
     // return { app }
   } else {

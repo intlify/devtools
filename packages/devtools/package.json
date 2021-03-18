@@ -6,7 +6,7 @@
   },
   "dependencies": {
     "@intlify-devtools/shared": "0.0.0",
-    "@mizchi/worker-dom": "^0.25.1",
+    "@intlify/worker-dom": "^1.0.0",
     "vue": "^3.0.5"
   },
   "engines": {

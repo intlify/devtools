@@ -1,4 +1,10 @@
-import { ready } from '@mizchi/worker-dom/dist/lib/worker'
+import { ready, exportFunction } from '@intlify/worker-dom/dist/lib/worker'
+
+async function foo(a: string): Promise<string> {
+  return 'hello'
+}
+
+[foo].map(fn => exportFunction(fn.name, fn))
 
 function createElement(msg: string, id: string): HTMLDivElement {
   const el = document.createElement('div')
@@ -15,7 +21,7 @@ function getIntlifyMetaData(attributes: Attr[]): string {
 function walkElement(node: Node) {
   node.childNodes.forEach(node => {
     // console.log('id, __INTLIFY__META__', (node as HTMLElement).id, (node as any).attributes, node)
-    if (node.nodeType === Node.ELEMENT_NODE && 'attributes' in node) {
+    if (node.nodeType === 1 && 'attributes' in node) {
       const element = (node as unknown) as Element
       const value = getIntlifyMetaData(
         (element.attributes as unknown) as Attr[]
@@ -27,25 +33,11 @@ function walkElement(node: Node) {
 }
 
 let counter = 1
-ready.then(() => {
+
+;(async () => {
+  await ready
+
   // console.log('hello worker dom!', document.body)
-  document.body.appendChild(
-    createElement('The world', `container-${++counter}`)
-  )
+  document.body.appendChild(createElement('The world', `container-${++counter}`))
   walkElement(document.body)
-})
-
-self.addEventListener('message', e => {
-  // document.body.appendChild(
-  //   createElement('The world', `container-${++counter}`)
-  // )
-  // console.log('hello worker dom!', document.querySelector('#container-2'))
-  // walkElement(document.body)
-
-  // @ts-ignore
-  self.postMessage(e.data)
-})
-
-export function foo(a: string): string {
-  return 'hello'
-}
+})()
