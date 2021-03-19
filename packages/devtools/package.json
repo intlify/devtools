@@ -6,7 +6,9 @@
   },
   "dependencies": {
     "@intlify-devtools/shared": "0.0.0",
-    "@intlify/worker-dom": "^1.0.0",
+    "@intlify/worker-dom": "^1.1.0",
+    "html2canvas": "^1.0.0-rc.7",
+    "tesseract.js": "^2.1.4",
     "vue": "^3.0.5"
   },
   "engines": {

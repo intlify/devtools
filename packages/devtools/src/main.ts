@@ -1,9 +1,7 @@
-import { Component, createApp, nextTick } from 'vue'
-import { attachWorker } from '@intlify/worker-dom/dist/lib/main'
-import DOMWorker from './worker?worker'
+import { Component, createApp } from 'vue'
 import App from './App.vue'
 
-function mount(Entry: Component, el?: string) {
+async function mount(Entry: Component, el?: string) {
   if (el) {
     const app = createApp(App)
     app.mixin({
@@ -25,12 +23,10 @@ function mount(Entry: Component, el?: string) {
       }
     })
     app.mount(el)
-    nextTick(async () => {
-      const worker = await attachWorker(document.getElementById('app'), new DOMWorker())
-      const ret = await worker.callFunction('foo', 'f')
-      console.log('ret', ret)
-    })
-    // return { app }
+    // window.addEventListener('mousemove', (ev) => {
+    //   console.log('ev', ev.offsetX, ev.offsetY, ev.clientX, ev.clientY)
+    // })
+    return { app }
   } else {
     const root = document.createElement('div')
     root.id = 'intlify-app'

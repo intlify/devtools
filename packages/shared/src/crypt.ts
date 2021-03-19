@@ -36,7 +36,10 @@ export function generateSecret(pass: string, salt: string): string {
  * @param {string} data A target data
  * @returns {Object} An IV and encryped data that these are encdoed with base64
  */
-export function encrypt(secret: string, data: string): { iv: string, encryptedData: string } {
+export function encrypt(
+  secret: string,
+  data: string
+): { iv: string; encryptedData: string } {
   // secret key from buffer
   const key = Buffer.from(secret, 'hex')
   // generate IV
@@ -56,7 +59,11 @@ export function encrypt(secret: string, data: string): { iv: string, encryptedDa
  * @param {string} encryptedData An encrypted data that encoded with base64
  * @returns {string} The decrypted data
  */
-export function decrypt(secret: string, iv: string, encryptedData: string): string {
+export function decrypt(
+  secret: string,
+  iv: string,
+  encryptedData: string
+): string {
   // secret key from buffer
   const key = Buffer.from(secret, 'hex')
   // IV from buffer
