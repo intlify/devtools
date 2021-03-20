@@ -20,16 +20,21 @@ export default defineConfig({
       }
     }),
     intlify({
-      devtools: 'http://localhost:3000/frontend'
+      devtools: 'http://localhost:3000/devtools'
     })
   ],
   server: {
     proxy: {
-      '/frontend': {
-        target: 'http://localhost:5000',
+      '/devtools': {
+        target: 'http://localhost:5001',
         changeOrigin: true,
-        // rewrite: path => path.replace(/^\/frontend/, '/src/main.ts')
-        rewrite: path => path.replace(/^\/frontend/, '/devtools.es.js')
+        // rewrite: path => path.replace(/^\/devtools/, '/src/main.ts')
+        rewrite: path => path.replace(/^\/devtools/, '/devtools.es.js')
+      },
+      '/clawler': {
+        target: 'http://localhost:5002',
+        changeOrigin: true,
+        rewrite: path => path.replace(/^\/clawler/, '/clawler.es.js')
       }
     }
   }

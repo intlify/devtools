@@ -51,7 +51,7 @@
     "ts-jest": "^26.5.0",
     "typescript": "^4.2.3",
     "typescript-eslint-language-service": "^4.1.3",
-    "vite": "^2.0.5"
+    "vite": "^2.1.2"
   },
   "engines": {
     "node": ">= 12"
@@ -70,18 +70,21 @@
     "url": "git+https://github.com/intlify/devtools.git"
   },
   "scripts": {
-    "build": "yarn build:shared && yarn build:vite-plugin && yarn build:devtools && yarn build:shell-dev",
+    "build": "yarn build:shared && yarn build:vite-plugin && yarn build:devtools && yarn build:clawler && yarn build:shell-dev",
     "build:devtools": "cd packages/devtools && yarn build",
+    "build:clawler": "cd packages/clawler && yarn build",
     "build:shared": "cd packages/shared && yarn build",
     "build:shell-dev": "cd packages/shell-dev && yarn build",
     "build:vite-plugin": "cd packages/vite-plugin-intlify-devtools && yarn build",
     "clean:deps": "npm-run-all --parallel clean:deps:*",
     "clean:deps:devtools": "cd packages/devtools && rm -rf node_modules",
+    "clean:deps:clawler": "cd packages/clawler && rm -rf node_modules",
     "clean:deps:shared": "cd packages/shared && rm -rf node_modules && rm -rf tsconfig.tsbuildinfo",
     "clean:deps:shell-dev": "cd packages/shell-dev && rm -rf node_modules",
     "clean:deps:vite-plugin": "cd packages/vite-plugin-intlify-devtools && rm -rf node_modules && rm -rf tsconfig.tsbuildinfo",
-    "dev": "concurrently -c 'blue.bold,magenta.bold' 'npm:serve:devtools' 'npm:dev:shell-dev'",
+    "dev": "concurrently -c 'blue.bold,green.bold,magenta.bold' 'npm:serve:devtools' 'npm:serve:clawler' 'npm:dev:shell-dev'",
     "dev:devtools": "cd packages/devtools && yarn dev",
+    "dev:clawler": "cd packages/clawler && yarn dev",
     "dev:shell-dev": "cd packages/shell-dev && yarn dev",
     "fix": "npm-run-all --parallel lint:fix format:fix",
     "format:fix": "npm-run-all --parallel \"format:prettier --write\" format:package",
@@ -93,7 +96,8 @@
     "preinstall": "node ./scripts/checkYarn.js",
     "release:prepare": "shipjs prepare",
     "release:trigger": "shipjs trigger",
-    "serve:devtools": "cd packages/devtools && yarn serve",
+    "serve:devtools": "cd packages/devtools && yarn serve --port 5001",
+    "serve:clawler": "cd packages/clawler && yarn serve --port 5002",
     "test": "echo 'run test!'",
     "watch": "concurrently -c 'blue.bold,magenta.bold' 'npm:watch:shared' 'npm:watch:vite-plugin'",
     "watch:shared": "cd packages/shared && yarn watch",
