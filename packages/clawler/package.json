@@ -5,25 +5,20 @@
     "url": "https://github.com/intlify/devtools/issues"
   },
   "dependencies": {
-    "@intlify-devtools/shared": "0.0.0",
-    "@intlify/worker-dom": "^1.1.0"
+    "@intlify/worker-dom": "^1.1.0",
+    "@intlify-devtools/shared": "0.0.0"
+  },
+  "devDependencies": {
+    "vue": "^3.0.5"
   },
   "engines": {
     "node": ">= 12"
   },
-  "exports": {
-    ".": {
-      "import": "dist/clawler.es.js",
-      "require": "dist/clawler.umd.js"
-    }
-  },
   "files": [
     "dist/clawler.es.js",
-    "dist/clawler.umd.js"
+    "dist/worker.js"
   ],
   "homepage": "https://github.com/intlify/devtools/tree/master/packages/clawler#readme",
-  "jsdelivr": "dist/clawler.umd.js",
-  "main": "dist/clawler.umd.js",
   "module": "dist/clawler.es.js",
   "repository": {
     "type": "git",
@@ -35,6 +30,5 @@
     "dev": "vite",
     "serve": "vite preview"
   },
-  "sideEffects": false,
-  "unpkg": "dist/clawler.umd.js"
+  "sideEffects": false
 }
