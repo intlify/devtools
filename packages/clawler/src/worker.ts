@@ -3,16 +3,18 @@ import type { MetaInfo } from './types'
 
 let _metaInfo: MetaInfo | null = null
 
-async function getIntlifyMetaInfo(): Promise<MetaInfo> {
-  if (_metaInfo != null) {
+const exportingFunctions = {
+  getIntlifyMetaInfo: async(): Promise<MetaInfo>  => {
+    if (_metaInfo != null) {
+      return _metaInfo
+    }
+    _metaInfo = []
+    walkElement(document.body, _metaInfo)
     return _metaInfo
   }
-  _metaInfo = []
-  walkElement(document.body, _metaInfo)
-  return _metaInfo
 }
 
-exportFunctions([getIntlifyMetaInfo])
+exportFunctions(exportingFunctions)
 
 function getIntlifyMetaData(attributes: Attr[]): string {
   const attr = attributes.find(({ name }) => name === 'data-intlify')

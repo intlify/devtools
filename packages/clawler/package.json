@@ -5,7 +5,7 @@
     "url": "https://github.com/intlify/devtools/issues"
   },
   "dependencies": {
-    "@intlify/worker-dom": "^1.1.0",
+    "@intlify/worker-dom": "^1.2.0",
     "@intlify-devtools/shared": "0.0.0"
   },
   "devDependencies": {

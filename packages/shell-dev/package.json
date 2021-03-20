@@ -7,6 +7,7 @@
   },
   "devDependencies": {
     "@intlify-devtools/shared": "0.0.0",
+    "@intlify/clawler": "0.0.0",
     "vite-plugin-intlify-devtools": "0.0.0"
   },
   "engines": {

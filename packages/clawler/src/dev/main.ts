@@ -7,6 +7,8 @@ createApp(App)
   .mixin(mixin)
   .mount('#app')
 
-await waitForFullyMount()
+;(async() => {
+  await waitForFullyMount()
 
-clawle(document.body)
+  clawle(document.body)
+})()

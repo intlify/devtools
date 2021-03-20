@@ -82,7 +82,7 @@
     "clean:deps:shared": "cd packages/shared && rm -rf node_modules && rm -rf tsconfig.tsbuildinfo",
     "clean:deps:shell-dev": "cd packages/shell-dev && rm -rf node_modules",
     "clean:deps:vite-plugin": "cd packages/vite-plugin-intlify-devtools && rm -rf node_modules && rm -rf tsconfig.tsbuildinfo",
-    "dev": "concurrently -c 'blue.bold,green.bold,magenta.bold' 'npm:serve:devtools' 'npm:serve:clawler' 'npm:dev:shell-dev'",
+    "dev": "concurrently -c 'blue.bold,magenta.bold' 'npm:serve:devtools' 'npm:dev:shell-dev'",
     "dev:devtools": "cd packages/devtools && yarn dev",
     "dev:clawler": "cd packages/clawler && yarn dev",
     "dev:shell-dev": "cd packages/shell-dev && yarn dev",

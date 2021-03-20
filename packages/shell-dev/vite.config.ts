@@ -30,11 +30,6 @@ export default defineConfig({
         changeOrigin: true,
         // rewrite: path => path.replace(/^\/devtools/, '/src/main.ts')
         rewrite: path => path.replace(/^\/devtools/, '/devtools.es.js')
-      },
-      '/clawler': {
-        target: 'http://localhost:5002',
-        changeOrigin: true,
-        rewrite: path => path.replace(/^\/clawler/, '/clawler.es.js')
       }
     }
   }

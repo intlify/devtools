@@ -433,6 +433,11 @@
   resolved "https://registry.yarnpkg.com/@intlify/worker-dom/-/worker-dom-1.1.0.tgz#21eb84b1745a1837f1a043137c577595f274b9d6"
   integrity sha512-MXgL+abnZGSIR/jz5l4qS0cXwIoXiv6gB2wI9W22KpVraCcZIOWRiTtqy6QA0rpZLbZESzl6fRQcAnAkvJgYsA==
 
+"@intlify/worker-dom@^1.2.0":
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/@intlify/worker-dom/-/worker-dom-1.2.0.tgz#1968c8895f78e20e3e466d234091a6485e07ff93"
+  integrity sha512-umUnjFO9iPb6cpFY/CCxCXO4iYE/R0DbmyYx9nnnn5dJamaqXj1YGy1IhLeEx5pg3yRzTw8x6tb4f2P9oqwetg==
+
 "@istanbuljs/load-nyc-config@^1.0.0":
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/@istanbuljs/load-nyc-config/-/load-nyc-config-1.1.0.tgz#fd3db1d59ecf7cf121e80650bb86712f9b55eced"
