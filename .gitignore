@@ -1,5 +1,6 @@
 .DS_Store
 .vscode
+.local
 coverage
 node_modules
 dist

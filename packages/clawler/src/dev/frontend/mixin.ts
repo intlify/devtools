@@ -1,6 +1,7 @@
 export const mixin = {
   mounted(this: any) {
     const { _, $el } = this
+    console.log('mounted', _, $el, $el.nodeType, $el.data)
     if (_ && _.type && _.type.__INTLIFY_META__ && $el) {
       if (
         $el.nodeType === Node.TEXT_NODE &&

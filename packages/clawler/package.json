@@ -5,11 +5,16 @@
     "url": "https://github.com/intlify/devtools/issues"
   },
   "dependencies": {
-    "@intlify/worker-dom": "^1.2.0",
-    "@intlify-devtools/shared": "0.0.0"
+    "@intlify-devtools/shared": "0.0.0",
+    "@intlify/worker-dom": "^1.2.0"
   },
   "devDependencies": {
-    "vue": "^3.0.5"
+    "@types/express": "^4.17.11",
+    "chalk": "^4.1.0",
+    "cross-env": "^7.0.3",
+    "express": "^4.17.1",
+    "vue": "^3.0.5",
+    "vue-router": "^4.0.5"
   },
   "engines": {
     "node": ">= 12"
@@ -20,6 +25,7 @@
   ],
   "homepage": "https://github.com/intlify/devtools/tree/master/packages/clawler#readme",
   "module": "dist/clawler.es.js",
+  "private": true,
   "repository": {
     "type": "git",
     "url": "git+https://github.com/intlify/devtools.git",
@@ -27,7 +33,9 @@
   },
   "scripts": {
     "build": "vite build",
-    "dev": "vite",
+    "dev": "cross-env PORT=4000 concurrently -c 'blue.bold,magenta.bold' 'npm:dev:backend' 'npm:dev:frontend'",
+    "dev:backend": "node ./src/dev/backend/index.mjs",
+    "dev:frontend": "vite",
     "serve": "vite preview"
   },
   "sideEffects": false

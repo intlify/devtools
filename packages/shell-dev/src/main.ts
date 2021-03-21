@@ -1,6 +1,6 @@
 import { createApp, nextTick } from 'vue'
 import App from './App.vue'
-import { default as clawle } from '@intlify/clawler'
+import { default as clawl } from '@intlify/clawler'
 import WorkerDOM from '@intlify/clawler/dist/worker?worker'
 
 console.log('shell-dev: App', App)
@@ -20,8 +20,7 @@ app.mixin({
   }
 })
 app.mount('#app')
-
-;(async() => {
+;(async () => {
   await nextTick()
-  clawle(document.body, WorkerDOM)
+  clawl(document.body, WorkerDOM)
 })()

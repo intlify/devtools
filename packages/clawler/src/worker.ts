@@ -4,13 +4,35 @@ import type { MetaInfo } from './types'
 let _metaInfo: MetaInfo | null = null
 
 const exportingFunctions = {
-  getIntlifyMetaInfo: async(): Promise<MetaInfo>  => {
+  async getIntlifyMetaInfo(): Promise<MetaInfo> {
     if (_metaInfo != null) {
       return _metaInfo
     }
     _metaInfo = []
     walkElement(document.body, _metaInfo)
     return _metaInfo
+  },
+  async pushMeta(
+    endpoint: string,
+    body: Record<string, unknown>
+  ): Promise<Record<string, unknown>> {
+    return (
+      await fetch(endpoint, {
+        method: 'post',
+        mode: 'cors',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(body)
+      })
+    ).json()
+  },
+  async walkElement(): Promise<MetaInfo> {
+    const metaInfo: MetaInfo = []
+    walkElement(document.body, metaInfo)
+    _metaInfo = metaInfo
+    return metaInfo
   }
 }
 

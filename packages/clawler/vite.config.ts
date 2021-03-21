@@ -7,9 +7,9 @@ import { generateSecret, encrypt } from '@intlify-devtools/shared'
 // @ts-ignore
 const secret = generateSecret()
 
-// https://vitejs.dev/config/
-export default ({ command }) => command === 'build' ? buildConfig : serveConfig
+const BACKEND_PORT = process.env.PORT || 4000
 
+// for vite serve
 const serveConfig = defineConfig({
   plugins: [
     vue(),
@@ -21,10 +21,18 @@ const serveConfig = defineConfig({
     })
   ],
   server: {
-    port: 3200
+    port: 3200,
+    proxy: {
+      '/bend': {
+        target: `http://localhost:${BACKEND_PORT}`,
+        changeOrigin: true,
+        rewrite: path => path.replace(/^\/bend/, '')
+      }
+    }
   }
 })
 
+// for vite build
 const buildConfig = defineConfig({
   publicDir: './dist',
   build: {
@@ -34,3 +42,7 @@ const buildConfig = defineConfig({
     }
   }
 })
+
+// https://vitejs.dev/config/
+export default ({ command }) =>
+  command === 'build' ? buildConfig : serveConfig
