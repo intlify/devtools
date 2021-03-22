@@ -3,13 +3,27 @@ import type { MetaInfo } from './types'
 
 let _metaInfo: MetaInfo | null = null
 
+let _resolve: Function | null = null
+const _ready = new Promise(resolve => {
+  _resolve = resolve
+})
+
+async function delay(ms: number) {
+  return new Promise(resolve => {
+    setTimeout(resolve, ms)
+  })
+}
+
 const exportingFunctions = {
+  async ready(): Promise<void> {
+    await _ready
+  },
   async getIntlifyMetaInfo(): Promise<MetaInfo> {
     if (_metaInfo != null) {
       return _metaInfo
     }
     _metaInfo = []
-    walkElement(document.body, _metaInfo)
+    walkElements(document.body, _metaInfo)
     return _metaInfo
   },
   async pushMeta(
@@ -28,11 +42,11 @@ const exportingFunctions = {
       })
     ).json()
   },
-  async walkElement(): Promise<MetaInfo> {
+  async walkElements(url?: string): Promise<{ url?: string, meta: MetaInfo }> {
     const metaInfo: MetaInfo = []
-    walkElement(document.body, metaInfo)
+    walkElements(document.body, metaInfo)
     _metaInfo = metaInfo
-    return metaInfo
+    return { url, meta: metaInfo }
   }
 }
 
@@ -43,22 +57,29 @@ function getIntlifyMetaData(attributes: Attr[]): string {
   return attr ? attr.value : ''
 }
 
-function walkElement(node: Node, metaInfo: MetaInfo) {
-  node.childNodes.forEach(node => {
-    // console.log('id, __INTLIFY__META__', (node as HTMLElement).id, (node as any).attributes, node)
-    if (node.nodeType === 1 && 'attributes' in node) {
-      const element = (node as unknown) as Element
-      const value = getIntlifyMetaData(
-        (element.attributes as unknown) as Attr[]
-      )
-      value && metaInfo.push(value)
-    }
-    walkElement(node, metaInfo)
+function walkElements(node: any, metaInfo: MetaInfo) {
+  // console.log('id, __INTLIFY__META__', node.nodeName, node.__INTLIFY_META__)
+  const { __INTLIFY_META__ } = node
+  __INTLIFY_META__ && metaInfo.push(__INTLIFY_META__)
+  node.childNodes.forEach((node: any) => {
+    walkElements(node, metaInfo)
+    // if (node.nodeType === 1 && 'attributes' in node) {
+    //   const element = (node as unknown) as Element
+    //   const value = getIntlifyMetaData(
+    //     (element.attributes as unknown) as Attr[]
+    //   )
+    //   value && metaInfo.push(value)
+    // }
   })
 }
 
 ;(async () => {
   await ready
   _metaInfo = []
-  await walkElement(document.body, _metaInfo)
+  // TODO:
+  // await delay(3000)
+  // console.log('... worker dom initialized !!')
+  // @ts-ignore
+  _resolve && _resolve()
+  // await walkElement(document.body, _metaInfo)
 })()

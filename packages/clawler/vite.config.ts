@@ -3,10 +3,11 @@ import vue from '@vitejs/plugin-vue'
 import intlifyVue from '@intlify/vite-plugin-vue-i18n/lib/injection'
 import path from 'path'
 import { generateSecret, encrypt } from '@intlify-devtools/shared'
+import { config as dotEnvConfig } from 'dotenv'
 
+const LOCAL_ENV = dotEnvConfig({ path: path.resolve(__dirname, './.env.local') }).parsed || {}
 // @ts-ignore
-const secret = generateSecret()
-
+const SECRET = LOCAL_ENV.INTLIFY_META_SECRET || process.env.INTLIFY_META_SECRET || generateSecret()
 const BACKEND_PORT = process.env.PORT || 4000
 
 // for vite serve
@@ -15,7 +16,7 @@ const serveConfig = defineConfig({
     vue(),
     intlifyVue({
       __INTLIFY_META__: (a1, a2) => {
-        const { iv, encryptedData } = encrypt(secret, a1)
+        const { iv, encryptedData } = encrypt(SECRET, a1)
         return `${iv}$${encryptedData}`
       }
     })
@@ -26,7 +27,7 @@ const serveConfig = defineConfig({
       '/bend': {
         target: `http://localhost:${BACKEND_PORT}`,
         changeOrigin: true,
-        rewrite: path => path.replace(/^\/bend/, '')
+        rewrite: path => path.replace(/^\/bend/, '/')
       }
     }
   }
