@@ -21,38 +21,45 @@ app.use((req, res, next) => { // for CORS
   next()
 })
 
-function setComponentPath(paths, set) {
+function setComponentPath(paths, components) {
   paths.forEach(p => {
     const [iv, encrypedData] = p.split('$')
     const componentPath = decrypt(SECRET, iv, encrypedData)
     console.log('path', componentPath)
-    set.add(componentPath)
+    components.paths.add(componentPath)
   })
 }
 
 app.get('/', (req, res) => {
+  console.log('req.query', req.query)
   const { url } = req.query
 
+  const components = STORE.get(url) || { paths: new Set() }
   res.status(200).json({
     url,
-    paths: [...STORE.get(url)]
+    paths: [...components.paths],
+    screenshot: components.screenshot
   })
 })
 
 app.post('/', (req, res) => {
-  console.log('req.body', req.body)
-  const { url, meta, added, removed, timestamp } = req.body
+  const { url, meta, added, removed, screenshot, timestamp } = req.body
 
-  const components = STORE.get(url) || new Set()
+  const components = STORE.get(url) || { paths: new Set() }
   STORE.set(url, components)
 
   meta && setComponentPath(meta, components)
   added && setComponentPath(added, components)
   removed && setComponentPath(removed, components)
 
+  if (screenshot) {
+    components.screenshot = screenshot
+  }
+
   res.status(200).json({
     url,
-    paths: [...components]
+    paths: [...components.paths],
+    screenshot
   })
 })
 

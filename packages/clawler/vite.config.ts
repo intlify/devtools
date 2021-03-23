@@ -5,9 +5,13 @@ import path from 'path'
 import { generateSecret, encrypt } from '@intlify-devtools/shared'
 import { config as dotEnvConfig } from 'dotenv'
 
-const LOCAL_ENV = dotEnvConfig({ path: path.resolve(__dirname, './.env.local') }).parsed || {}
+const LOCAL_ENV =
+  dotEnvConfig({ path: path.resolve(__dirname, './.env.local') }).parsed || {}
 // @ts-ignore
-const SECRET = LOCAL_ENV.INTLIFY_META_SECRET || process.env.INTLIFY_META_SECRET || generateSecret()
+const SECRET =
+  LOCAL_ENV.INTLIFY_META_SECRET ||
+  process.env.INTLIFY_META_SECRET ||
+  generateSecret()
 const BACKEND_PORT = process.env.PORT || 4000
 
 // for vite serve

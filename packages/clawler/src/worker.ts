@@ -3,7 +3,7 @@ import type { MetaInfo } from './types'
 
 let _metaInfo: MetaInfo | null = null
 
-let _resolve: Function | null = null
+let _resolve: Function | null = null // eslint-disable-line @typescript-eslint/ban-types
 const _ready = new Promise(resolve => {
   _resolve = resolve
 })
@@ -42,7 +42,7 @@ const exportingFunctions = {
       })
     ).json()
   },
-  async walkElements(url?: string): Promise<{ url?: string, meta: MetaInfo }> {
+  async walkElements(url?: string): Promise<{ url?: string; meta: MetaInfo }> {
     const metaInfo: MetaInfo = []
     walkElements(document.body, metaInfo)
     _metaInfo = metaInfo

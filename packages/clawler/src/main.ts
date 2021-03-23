@@ -1,5 +1,7 @@
+import html2canvas from 'html2canvas'
 import { attachWorker } from '@intlify/worker-dom/dist/lib/main'
 import WorkerDOM from './worker?worker'
+import { isEmpty, getEndPoint } from './helper'
 
 import type { MetaInfo } from './types'
 
@@ -13,13 +15,19 @@ export default async function clawl(el: HTMLElement, Worker?: any) {
   await worker.callFunction('ready')
   console.log('... done worker!')
 
-  const { url, meta } = await worker.callFunction('walkElements', window.location.href)
+  const { url, meta } = await worker.callFunction(
+    'walkElements',
+    window.location.href
+  )
   console.log('collect meta', meta)
   console.log('page url', url)
+
+  const canvas = await html2canvas(document.body)
 
   const body = {
     url,
     meta,
+    screenshot: canvas.toDataURL(),
     timestamp: new Date().getTime()
   }
   const res = await worker.callFunction('pushMeta', getEndPoint(), body)
@@ -44,19 +52,15 @@ function observeDOM(el: HTMLElement, worker: any) {
     }
 
     body.timestamp = new Date().getTime()
+
+    const canvas = await html2canvas(document.body)
+    body.screenshot = canvas.toDataURL()
+
     const res = await worker.callFunction('pushMeta', getEndPoint(), body)
     console.log('backend res', res, import.meta.env)
   })
 
   observer.observe(el, { childList: true, subtree: true })
-}
-
-function isEmpty(items: unknown[]) {
-  return items.length === 0
-}
-
-function getEndPoint() {
-  return import.meta.env.VITE_BASE_ENDPOINT as string
 }
 
 function walkElements(node: any, metaInfo: MetaInfo) {
