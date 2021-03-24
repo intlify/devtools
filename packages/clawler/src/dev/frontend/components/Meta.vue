@@ -33,5 +33,6 @@ const props = defineProps({
 <style scoped>
 .screenshot {
   width: 100vw;
+  border: solid red;
 }
 </style>

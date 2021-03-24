@@ -2,6 +2,7 @@ import express, { json, urlencoded } from 'express'
 import chalk from 'chalk'
 import { config as dotEnvConfig } from 'dotenv'
 import { generateSecret, decrypt } from '@intlify-devtools/shared'
+import { screenshot } from './browser.mjs'
 
 const LOCAL_ENV = dotEnvConfig({ path: './.env.local' }).parsed || {}
 // @ts-ignore
@@ -41,8 +42,8 @@ app.get('/', (req, res) => {
   })
 })
 
-app.post('/', (req, res) => {
-  const { url, meta, added, removed, screenshot, timestamp } = req.body
+app.post('/', async (req, res) => {
+  const { url, meta, added, removed, /*screenshot, */timestamp } = req.body
 
   const components = STORE.get(url) || { paths: new Set() }
   STORE.set(url, components)
@@ -51,14 +52,18 @@ app.post('/', (req, res) => {
   added && setComponentPath(added, components)
   removed && setComponentPath(removed, components)
 
-  if (screenshot) {
-    components.screenshot = screenshot
+  const data = await screenshot(url)
+  if (data) {
+    components.screenshot = data
   }
+  // if (screenshot) {
+  //   components.screenshot = screenshot
+  // }
 
   res.status(200).json({
     url,
     paths: [...components.paths],
-    screenshot
+    // screenshot
   })
 })
 
