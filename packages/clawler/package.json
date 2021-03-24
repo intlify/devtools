@@ -11,12 +11,14 @@
     "html2canvas": "^1.0.0-rc.7"
   },
   "devDependencies": {
+    "@intlify/vite-plugin-vue-i18n": "^2.0.4",
     "@types/express": "^4.17.11",
     "chalk": "^4.1.0",
     "cross-env": "^7.0.3",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "vue": "^3.0.5",
+    "vue-i18n": "^9.0.0",
     "vue-router": "^4.0.5"
   },
   "engines": {

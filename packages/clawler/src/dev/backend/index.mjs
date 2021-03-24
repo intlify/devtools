@@ -2,7 +2,6 @@ import express, { json, urlencoded } from 'express'
 import chalk from 'chalk'
 import { config as dotEnvConfig } from 'dotenv'
 import { generateSecret, decrypt } from '@intlify-devtools/shared'
-import path from 'path'
 
 const LOCAL_ENV = dotEnvConfig({ path: './.env.local' }).parsed || {}
 // @ts-ignore
@@ -12,9 +11,9 @@ const PORT = process.env.PORT || 4000
 const STORE = new Map()
 
 const app = express()
-app.use(json())
-app.use(urlencoded({ extended: true }))
-app.use((req, res, next) => { // for CORS
+app.use(json({ limit: '200mb' })) // TODO: change to no limit option
+app.use(urlencoded({ limit: '200mb', extended: true })) // TODO: change to no limit option
+app.use((req, res, next) => { // for CORS, TODO: change to another ways
   res.header('Access-Control-Allow-Origin', '*')
   res.header('Access-Control-Allow-Methods', '*')
   res.header('Access-Control-Allow-Headers', '*')

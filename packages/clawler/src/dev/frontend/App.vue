@@ -1,5 +1,5 @@
 <template>
-  <h1>Dev Clawler!</h1>
+  <h1>{{ t('title') }}</h1>
   <nav>
     <div class="navigation">
       <router-link :to="{ name: 'home' }">Home</router-link>
@@ -20,12 +20,15 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { getEndPoint } from '../../helper'
 
-import Hello from './Hello.vue'
-import Meta from './Meta.vue'
-import On from './On.vue'
-import Off from './Off.vue'
+import Hello from './components/Hello.vue'
+import Meta from './components/Meta.vue'
+import On from './components/On.vue'
+import Off from './components/Off.vue'
+
+const { t } = useI18n({ inheritLocale: true, useScope: 'global' })
 
 const count = ref(0)
 const toggle = ref(false)

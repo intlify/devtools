@@ -418,7 +418,7 @@
   resolved "https://registry.yarnpkg.com/@intlify/shared/-/shared-9.0.0.tgz#d85b3b5f9033f377c5cf2202cf2459aa49948f36"
   integrity sha512-0r4v7dnY8g/Jfx2swUWy2GyfH/WvIpWvkU4OIupvxDTWiE8RhcpbOCVvqpVh/xGi0proHQ/r2Dhc0QSItUsfDQ==
 
-"@intlify/vite-plugin-vue-i18n@^2.0.2":
+"@intlify/vite-plugin-vue-i18n@^2.0.2", "@intlify/vite-plugin-vue-i18n@^2.0.4":
   version "2.0.4"
   resolved "https://registry.yarnpkg.com/@intlify/vite-plugin-vue-i18n/-/vite-plugin-vue-i18n-2.0.4.tgz#364134a63db3a4d6a50cf53850a824e63419fad1"
   integrity sha512-Wumxwenjoo+Lors1q6pxovngLfjba9b5JM0FKWbgQxroBP0yJpdn9GNrs0+WZp+hHqqUAtYvTfOPCovymySFxw==

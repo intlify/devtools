@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import Home from './Home.vue'
-import About from './About.vue'
+import Home from './pages/Home.vue'
+import About from './pages/About.vue'
 
 import type { RouteRecordRaw } from 'vue-router'
 

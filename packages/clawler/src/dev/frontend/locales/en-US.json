@@ -1,0 +1,14 @@
+{
+  "title": "Dev Clawler!",
+  "pages": {
+    "home": "Home",
+    "about": "About"
+  },
+  "comopoonents": {
+    "hello": {
+      "greeting": "Hello {name} !"
+    },
+    "off": "Off",
+    "on": "On"
+  }
+}

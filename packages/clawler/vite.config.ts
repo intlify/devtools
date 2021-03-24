@@ -1,5 +1,6 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
+import vueI18n from '@intlify/vite-plugin-vue-i18n'
 import intlifyVue from '@intlify/vite-plugin-vue-i18n/lib/injection'
 import path from 'path'
 import { generateSecret, encrypt } from '@intlify-devtools/shared'
@@ -18,6 +19,9 @@ const BACKEND_PORT = process.env.PORT || 4000
 const serveConfig = defineConfig({
   plugins: [
     vue(),
+    vueI18n({
+      include: path.resolve(__dirname, './src/dev/frontend/locales/**')
+    }),
     intlifyVue({
       __INTLIFY_META__: (a1, a2) => {
         const { iv, encryptedData } = encrypt(SECRET, a1)
