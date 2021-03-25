@@ -18,6 +18,7 @@
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "puppeteer": "^8.0.0",
+    "tesseract.js": "^2.1.4",
     "vue": "^3.0.5",
     "vue-i18n": "^9.0.0",
     "vue-router": "^4.0.5"

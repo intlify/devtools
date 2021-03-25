@@ -1,4 +1,5 @@
 import puppeteer from 'puppeteer'
+import Tesseract from 'tesseract.js'
 
 const headless = true
 const slowMo = 10
@@ -39,4 +40,10 @@ export async function screenshot(url, ms=0) {
     }
     capturing = false
   }
+}
+
+export async function detect(image) {
+  return Tesseract.recognize(image, 'eng', {
+    logger: m => console.log(m)
+  })
 }

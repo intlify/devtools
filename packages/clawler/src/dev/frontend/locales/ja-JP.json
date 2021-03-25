@@ -1,0 +1,14 @@
+{
+  "title": "開発向けクローラー!",
+  "pages": {
+    "home": "ホーム",
+    "about": "あばうと"
+  },
+  "comopoonents": {
+    "hello": {
+      "greeting": "こんにちは {name} ！"
+    },
+    "off": "無効",
+    "on": "有効"
+  }
+}

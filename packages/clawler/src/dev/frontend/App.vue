@@ -2,9 +2,9 @@
   <h1>{{ t('title') }}</h1>
   <nav>
     <div class="navigation">
-      <router-link :to="{ name: 'home' }">Home</router-link>
+      <router-link :to="{ name: 'home' }">{{ t('pages.home') }}</router-link>
       |
-      <router-link :to="{ name: 'about' }">About</router-link>
+      <router-link :to="{ name: 'about' }">{{ t('pages.about') }}</router-link>
     </div>
     <input v-model="toggle" type="checkbox" />
     <On v-if="toggle"></On>
