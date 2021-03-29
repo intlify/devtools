@@ -64,9 +64,6 @@ app.post('/', async (req, res) => {
     console.log(d)
     components.detect = d.data
   }
-  // if (screenshot) {
-  //   components.screenshot = screenshot
-  // }
 
   res.status(200).json({
     url,

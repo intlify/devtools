@@ -9,6 +9,10 @@
   "bugs": {
     "url": "https://github.com/intlify/devtools/issues"
   },
+  "dependencies": {
+    "@vue/compiler-core": "^3.0.7",
+    "@vue/compiler-sfc": "^3.0.7"
+  },
   "engines": {
     "node": ">= 12"
   },
