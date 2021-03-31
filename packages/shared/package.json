@@ -10,8 +10,13 @@
     "url": "https://github.com/intlify/devtools/issues"
   },
   "dependencies": {
-    "@vue/compiler-core": "^3.0.7",
-    "@vue/compiler-sfc": "^3.0.7"
+    "@babel/parser": "^7.13.13",
+    "@intlify/shared": "^9.0.0",
+    "@vue/compiler-core": "^3.0.10",
+    "@vue/compiler-sfc": "^3.0.10"
+  },
+  "devDependencies": {
+    "@babel/types": "^7.13.14"
   },
   "engines": {
     "node": ">= 12"
