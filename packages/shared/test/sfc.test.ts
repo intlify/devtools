@@ -160,4 +160,22 @@ const message: string = t('foo.bar.buz')
 </script>`
     expect(getResourceKeys(source)).toEqual(['foo.bar.buz'])
   })
+
+  test('tempalte & script', () => {
+    const source = `<template>
+  <p>{{ $t('foo.bar.buz') }}</p>
+  <p>{{ t('hello') }}</p>
+</template>
+<script setup lang="ts">
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
+const message: string = t('foo.bar.buz.foo')
+</script>`
+    expect(getResourceKeys(source)).toEqual([
+      'foo.bar.buz',
+      'hello',
+      'foo.bar.buz.foo'
+    ])
+  })
 })

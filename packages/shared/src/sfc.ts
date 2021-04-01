@@ -96,7 +96,9 @@ export function getResourceKeys(
   const { errors, descriptor } = parse(source)
 
   if (errors.length) {
-    const error = new Error('Occured at vue compile error. see the `messages` property') as I18nResourceError
+    const error = new Error(
+      'Occured at vue compile error. see the `messages` property'
+    ) as I18nResourceError
     error.errors = errors
     throw error
   }
@@ -125,7 +127,7 @@ export function getResourceKeys(
     // }
     const block = descriptor.script || descriptor.scriptSetup
     if (block) {
-      keys = [...keys, ...traverseI18nCallExpression(block.content, options)]  
+      keys = [...keys, ...traverseI18nCallExpression(block.content, options)]
     }
   }
 
@@ -147,7 +149,7 @@ function traverseVueTemplateNode(
       // console.log('compound expression node', node.type, node.loc.source)
       node.children.forEach(node => {
         if (!isString(node) && !isSymbol(node)) {
-          traverseVueTemplateNode(node, visitor, options) 
+          traverseVueTemplateNode(node, visitor, options)
         }
       })
     } else if (isIfNode(node)) {
@@ -155,16 +157,20 @@ function traverseVueTemplateNode(
       node.branches.forEach(node => {
         // console.log('if branch node', node)
         if (isTemplateExpressionNode(node.condition)) {
-          visitor(traverseI18nCallExpression(node.condition.loc.source, options)) 
+          visitor(
+            traverseI18nCallExpression(node.condition.loc.source, options)
+          )
         }
       })
     } else if (isForNode(node)) {
       // console.log('fore node', node)
       if (isTemplateExpressionNode(node.source)) {
-        visitor(traverseI18nCallExpression(node.source.loc.source, options)) 
+        visitor(traverseI18nCallExpression(node.source.loc.source, options))
       }
     } else if (isElementNode(node)) {
-      node.children.forEach(node => traverseVueTemplateNode(node, visitor, options))
+      node.children.forEach(node =>
+        traverseVueTemplateNode(node, visitor, options)
+      )
       node.props.forEach(node => {
         if (isDirectiveNode(node) && isTemplateExpressionNode(node.exp)) {
           visitor(traverseI18nCallExpression(node.exp.loc.source, options))
@@ -176,7 +182,7 @@ function traverseVueTemplateNode(
     visitor(traverseI18nCallExpression(node.loc.source, options))
   } else if (isRootNode(node)) {
     node.children.forEach(node => {
-      traverseVueTemplateNode(node, visitor, options) 
+      traverseVueTemplateNode(node, visitor, options)
     })
   }
 }
