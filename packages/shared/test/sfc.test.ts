@@ -119,8 +119,9 @@ import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()
 const message = t('foo.bar.buz')
+const top = await $t('top level async/await')
 </script>`
-    expect(getResourceKeys(source)).toEqual(['foo.bar.buz'])
+    expect(getResourceKeys(source)).toEqual(['foo.bar.buz', 'top level async/await'])
   })
 
   test('script block: JSX', () => {

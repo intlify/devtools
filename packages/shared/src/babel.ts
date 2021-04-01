@@ -63,6 +63,7 @@ export function traverseI18nCallExpression(
   const ast = parse(source, {
     sourceType: 'module',
     plugins: [
+      'topLevelAwait',
       'jsx', // for vue-jsx
       'typescript',
       'decorators-legacy' // for vue-class-component
