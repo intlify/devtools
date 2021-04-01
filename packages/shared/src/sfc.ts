@@ -93,7 +93,6 @@ export function getResourceKeys(
     filename: 'template.vue',
     id: 'template.vue' // dummy
   })
-  // console.log(ret.ast)
   if (ret?.ast) {
     const visitor = (k: string[]): void => {
       keys = [...keys, ...k]
