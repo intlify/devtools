@@ -161,6 +161,24 @@ const message: string = t('foo.bar.buz')
     expect(getResourceKeys(source)).toEqual(['foo.bar.buz'])
   })
 
+  test('i18n component', () => {
+    const source = `<template>
+  <i18n path="foo.bar.buz">
+    <p>{{ $t('hello') }}</p>
+  </i18n>
+</template>`
+    expect(getResourceKeys(source)).toEqual(['foo.bar.buz', 'hello'])
+  })
+
+  test('i18n-t component', () => {
+    const source = `<template>
+  <i18n-t keypath="foo.bar.buz">
+    <p>{{ $t('hello') }}</p>
+  </i18n-t>
+</template>`
+    expect(getResourceKeys(source)).toEqual(['foo.bar.buz', 'hello'])
+  })
+
   test('tempalte & script', () => {
     const source = `<template>
   <p>{{ $t('foo.bar.buz') }}</p>

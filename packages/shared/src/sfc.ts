@@ -11,6 +11,7 @@ import type {
   CompoundExpressionNode,
   ExpressionNode,
   DirectiveNode,
+  AttributeNode,
   IfNode,
   ForNode,
   RootNode,
@@ -72,6 +73,10 @@ function isDirectiveNode(node: any): node is DirectiveNode {
   return isObject(node) && node.type === NodeTypes.DIRECTIVE
 }
 
+function isAttributeNode(node: any): node is AttributeNode {
+  return isObject(node) && node.type === NodeTypes.ATTRIBUTE
+}
+
 export interface I18nResourceError extends SyntaxError {
   errors: (CompilerError | SyntaxError)[]
 }
@@ -89,8 +94,8 @@ export function getResourceKeys(
   options: TraverseI18nOptions = {}
 ): string[] {
   let keys: string[] = []
-  const visitor = (k: string[]): void => {
-    keys = [...keys, ...k]
+  const visitor = (_keys: string[]): void => {
+    keys = [...keys, ..._keys]
   }
 
   const { errors, descriptor } = parse(source)
@@ -115,16 +120,6 @@ export function getResourceKeys(
   }
 
   if (descriptor.script || descriptor.scriptSetup) {
-    // TODO: maybe, we can traverse with compileScript result ...
-    // const scriptResult = compileScript(descriptor, {
-    //   id: 'script.vue', // dummy
-    //   refSugar: true,
-    //   inlineTemplate: true
-    // })
-    // console.log('sscript', scriptResult.scriptAst)
-    // if (scriptResult.scriptAst != null) {
-    //   keys = [...keys, ...traverseI18nCallExpression(scriptResult.scriptAst, options)]
-    // }
     const block = descriptor.script || descriptor.scriptSetup
     if (block) {
       keys = [...keys, ...traverseI18nCallExpression(block.content, options)]
@@ -168,14 +163,26 @@ function traverseVueTemplateNode(
         visitor(traverseI18nCallExpression(node.source.loc.source, options))
       }
     } else if (isElementNode(node)) {
-      node.children.forEach(node =>
-        traverseVueTemplateNode(node, visitor, options)
-      )
+      const elementNode = node
       node.props.forEach(node => {
         if (isDirectiveNode(node) && isTemplateExpressionNode(node.exp)) {
           visitor(traverseI18nCallExpression(node.exp.loc.source, options))
+        } else if (
+          ['i18n', 'i18n-t'].includes(elementNode.tag) &&
+          isAttributeNode(node) &&
+          node.value
+        ) {
+          if (
+            (elementNode.tag === 'i18n-t' && node.name === 'keypath') ||
+            (elementNode.tag === 'i18n' && node.name === 'path')
+          ) {
+            visitor([node.value.content])
+          }
         }
       })
+      node.children.forEach(node =>
+        traverseVueTemplateNode(node, visitor, options)
+      )
     }
   } else if (isSimpleExpressionNode(node)) {
     // console.log('simple expression node', node)
