@@ -61,7 +61,11 @@ export function traverseI18nCallExpression(
     options.objectIdentifiers ?? DEFAULT_I18N_OBJECT_IDENTIFITERS
 
   const ast = parse(source, {
-    allowImportExportEverywhere: true
+    sourceType: 'module',
+    plugins: [
+      'jsx',
+      'typescript'
+    ]
   })
 
   const keys = [] as string[]

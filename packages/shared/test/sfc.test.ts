@@ -122,4 +122,42 @@ const message = t('foo.bar.buz')
 </script>`
     expect(getResourceKeys(source)).toEqual(['foo.bar.buz'])
   })
+
+  test('script block: JSX', () => {
+    // for Option API
+    const sourceOptionAPI = `<script>
+export default {
+  name: 'Comp',
+  render(h) {
+    <p>{$t('hello jsx!')}</p>
+  }
+}
+</script>`
+    expect(getResourceKeys(sourceOptionAPI)).toEqual(['hello jsx!'])
+
+    // for Composition API
+    const source = `<script>
+import { useI18n } from 'vue-i18n'
+
+export default {
+  setup() {
+    const { t } = useI18n()
+    return () => (
+      <p>{t('hello JSX!')}</p>
+    )
+  }
+}
+</script>`
+    expect(getResourceKeys(source)).toEqual(['hello JSX!'])
+  })
+
+  test('script block: TypeScript', () => {
+    const source = `<script setup lang="ts">
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
+const message: string = t('foo.bar.buz')
+</script>`
+    expect(getResourceKeys(source)).toEqual(['foo.bar.buz'])
+  })
 })

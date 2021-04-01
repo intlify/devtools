@@ -1,5 +1,5 @@
 import { NodeTypes, CompilerError } from '@vue/compiler-core'
-import { parse, compileTemplate, compileScript } from '@vue/compiler-sfc'
+import { parse, compileTemplate } from '@vue/compiler-sfc'
 import { isObject, isString, isSymbol } from '@intlify/shared'
 import { traverseI18nCallExpression } from './babel'
 
@@ -127,10 +127,6 @@ export function getResourceKeys(
     if (block) {
       keys = [...keys, ...traverseI18nCallExpression(block.content, options)]  
     }
-  }
-
-  if (descriptor.scriptSetup) {
-    // TODO: scriptSetup null checking!
   }
 
   return keys
