@@ -1,3 +1,3 @@
 export * from './crypt'
 export * from './mixin'
-export * from './i18n'
+export * from './sfc'
