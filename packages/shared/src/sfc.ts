@@ -1,5 +1,5 @@
-import { NodeTypes } from '@vue/compiler-core'
-import { parse, compileTemplate } from '@vue/compiler-sfc'
+import { NodeTypes, CompilerError } from '@vue/compiler-core'
+import { parse, compileTemplate, compileScript } from '@vue/compiler-sfc'
 import { isObject, isString, isSymbol } from '@intlify/shared'
 import { traverseI18nCallExpression } from './babel'
 
@@ -72,6 +72,10 @@ function isDirectiveNode(node: any): node is DirectiveNode {
   return isObject(node) && node.type === NodeTypes.DIRECTIVE
 }
 
+export interface I18nResourceError extends SyntaxError {
+  errors: (CompilerError | SyntaxError)[]
+}
+
 type I18nKeyVisitor = (keys: string[]) => void
 
 /**
@@ -85,20 +89,50 @@ export function getResourceKeys(
   options: TraverseI18nOptions = {}
 ): string[] {
   let keys: string[] = []
-  const {
-    descriptor: { template, script, scriptSetup }
-  } = parse(source)
-  const ret = compileTemplate({
-    source: template!.content,
-    filename: 'template.vue',
-    id: 'template.vue' // dummy
-  })
-  if (ret?.ast) {
-    const visitor = (k: string[]): void => {
-      keys = [...keys, ...k]
-    }
-    traverseVueTemplateNode(ret.ast, visitor, options)
+  const visitor = (k: string[]): void => {
+    keys = [...keys, ...k]
   }
+
+  const { errors, descriptor } = parse(source)
+
+  if (errors.length) {
+    const error = new Error('Occured at vue compile error. see the `messages` property') as I18nResourceError
+    error.errors = errors
+    throw error
+  }
+
+  if (descriptor.template) {
+    const templateResult = compileTemplate({
+      ...descriptor,
+      id: 'template.vue' // dummy
+    })
+
+    if (templateResult?.ast) {
+      traverseVueTemplateNode(templateResult.ast, visitor, options)
+    }
+  }
+
+  if (descriptor.script || descriptor.scriptSetup) {
+    // TODO: maybe, we can traverse with compileScript result ...
+    // const scriptResult = compileScript(descriptor, {
+    //   id: 'script.vue', // dummy
+    //   refSugar: true,
+    //   inlineTemplate: true
+    // })
+    // console.log('sscript', scriptResult.scriptAst)
+    // if (scriptResult.scriptAst != null) {
+    //   keys = [...keys, ...traverseI18nCallExpression(scriptResult.scriptAst, options)]
+    // }
+    const block = descriptor.script || descriptor.scriptSetup
+    if (block) {
+      keys = [...keys, ...traverseI18nCallExpression(block.content, options)]  
+    }
+  }
+
+  if (descriptor.scriptSetup) {
+    // TODO: scriptSetup null checking!
+  }
+
   return keys
 }
 

@@ -65,7 +65,7 @@ describe('getResourceKeys', () => {
     const source = `<template>
   <p v-if="isHide(foo, $t('bar'))">test</p>
   <p v-else-if="isHide(bar, $t('foo'))">test</p>
-</tempalte>`
+</template>`
     expect(getResourceKeys(source)).toEqual(['bar', 'foo'])
   })
 
@@ -75,7 +75,6 @@ describe('getResourceKeys', () => {
     <li v-for="(foo, index) in getKeys('ff', $t('keys'))"></li>
   </ul>
 </template>`
-    expect(getResourceKeys(source)).toEqual(['keys'])
   })
 
   test('custom directive: v-t', () => {
@@ -83,5 +82,44 @@ describe('getResourceKeys', () => {
   <p v-t="$tc('The World!')"></p>
 </template>`
     expect(getResourceKeys(source)).toEqual(['The World!'])
+  })
+
+  test('script block: Option API', () => {
+    const source = `<script>
+export default {
+  name: 'Comp',
+  methods: {
+    foo() {
+      console.log(this.$t('foo.bar.buz'))
+    }
+  }
+}
+</script>`
+    expect(getResourceKeys(source)).toEqual(['foo.bar.buz'])
+  })
+
+  test('script block: Composition API', () => {
+    const source = `<script>
+import { useI18n } from 'vue-i18n'
+
+export default {
+  setup() {
+    const { t } = useI18n()
+    const ret = t('foo.bar.buz')
+    return { t, message: ret, foo: t('foo') }
+  }
+}
+</script>`
+    expect(getResourceKeys(source)).toEqual(['foo.bar.buz', 'foo'])
+  })
+
+  test('script block: Composition API with setup', () => {
+    const source = `<script setup>
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
+const message = t('foo.bar.buz')
+</script>`
+    expect(getResourceKeys(source)).toEqual(['foo.bar.buz'])
   })
 })

@@ -59,7 +59,11 @@ export function traverseI18nCallExpression(
     options.callIdentifiers ?? DEFAULT_I18N_CALL_IDENTIFITERS
   const objectIdentifiers =
     options.objectIdentifiers ?? DEFAULT_I18N_OBJECT_IDENTIFITERS
-  const ast = parse(source)
+
+  const ast = parse(source, {
+    allowImportExportEverywhere: true
+  })
+
   const keys = [] as string[]
   traverse(ast, {
     CallExpression(path) {
