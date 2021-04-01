@@ -88,6 +88,7 @@
     "dev:clawler": "cd packages/clawler && yarn dev",
     "dev:devtools": "cd packages/devtools && yarn dev",
     "dev:shell-dev": "cd packages/shell-dev && yarn dev",
+    "setup:secret": "node ./scripts/generateMetaSecret.js",
     "fix": "npm-run-all --parallel lint:fix format:fix",
     "format:fix": "npm-run-all --parallel \"format:prettier --write\" format:package",
     "format:package": "node scripts/fixpack.js",
