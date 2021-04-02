@@ -15,6 +15,7 @@ import type {
   IfNode,
   ForNode,
   RootNode,
+  TextCallNode,
   InterpolationNode
 } from '@vue/compiler-core'
 import type { TraverseI18nOptions } from './babel'
@@ -67,6 +68,10 @@ function isIfNode(node: any): node is IfNode {
 
 function isForNode(node: any): node is ForNode {
   return isObject(node) && node.type === NodeTypes.FOR
+}
+
+function isTextCallNode(node: any): node is TextCallNode {
+  return isObject(node) && node.type === NodeTypes.TEXT_CALL
 }
 
 function isDirectiveNode(node: any): node is DirectiveNode {
@@ -135,7 +140,9 @@ function traverseVueTemplateNode(
   options: TraverseI18nOptions
 ): void {
   if (isTemplateChildNode(node)) {
-    if (isInterpolationNode(node)) {
+    if (isTextCallNode(node)) {
+      traverseVueTemplateNode(node.content, visitor, options)
+    } else if (isInterpolationNode(node)) {
       // console.log('interpolation node', node.type, node.content, node.loc.source)
       if (isTemplateExpressionNode(node.content)) {
         visitor(traverseI18nCallExpression(node.loc.source, options))

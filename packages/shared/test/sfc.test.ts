@@ -84,6 +84,20 @@ describe('getResourceKeys', () => {
     expect(getResourceKeys(source)).toEqual(['The World!'])
   })
 
+  test('include text call nodes', () => {
+    const source = `<template>
+  <h1>{{ t('title') }}</h1>
+  <nav>
+    <div class="navigation">
+      <router-link :to="{ name: 'home' }">{{ t('pages.home') }}</router-link>
+      |
+      <router-link :to="{ name: 'about' }">{{ t('pages.about') }}</router-link>
+    </div>
+  </nav>
+</template>`
+    expect(getResourceKeys(source)).toEqual(['title', 'pages.home', 'pages.about'])
+  })
+
   test('script block: Option API', () => {
     const source = `<script>
 export default {
