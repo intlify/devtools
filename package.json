@@ -96,7 +96,7 @@
     "lint": "npm-run-all --parallel lint:codes",
     "lint:codes": "eslint ./packages --ext .js,.ts,.vue",
     "lint:fix": "npm-run-all --parallel \"lint:codes --fix\"",
-    "preinstall": "node -r esbuild-register ./scripts/checkYarn.ts",
+    "preinstall": "node ./scripts/checkYarn.js",
     "release:prepare": "shipjs prepare",
     "release:trigger": "shipjs trigger",
     "serve:clawler": "cd packages/clawler && yarn serve --port 5002",
