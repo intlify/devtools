@@ -48,7 +48,7 @@ app.get('/', (req, res) => {
 })
 
 app.post('/', async (req, res) => {
-  const { url, meta, added, removed, /*screenshot, */timestamp } = req.body
+  const { url, meta, added, removed, /*screenshot, */timestamp, text } = req.body
 
   const components = STORE.get(url) || { paths: new Set() }
   STORE.set(url, components)
@@ -67,6 +67,7 @@ app.post('/', async (req, res) => {
 
   res.status(200).json({
     url,
+    DOMText: text,
     paths: [...components.paths],
     screenshot: components.screenshot,
     detect: components.detect

@@ -23,7 +23,7 @@ const exportingFunctions = {
       return _metaInfo
     }
     _metaInfo = []
-    walkElements(document.body, _metaInfo)
+    walkElements(document.body, _metaInfo, [])
     return _metaInfo
   },
   async pushMeta(
@@ -42,11 +42,12 @@ const exportingFunctions = {
       })
     ).json()
   },
-  async walkElements(url?: string): Promise<{ url?: string; meta: MetaInfo }> {
+  async walkElements(url?: string): Promise<{ url?: string; meta: MetaInfo, text?: string[] }> {
     const metaInfo: MetaInfo = []
-    walkElements(document.body, metaInfo)
+    const text: string[] = []
+    walkElements(document.body, metaInfo, text)
     _metaInfo = metaInfo
-    return { url, meta: metaInfo }
+    return { url, meta: metaInfo, text }
   }
 }
 
@@ -57,19 +58,18 @@ function getIntlifyMetaData(attributes: Attr[]): string {
   return attr ? attr.value : ''
 }
 
-function walkElements(node: any, metaInfo: MetaInfo) {
+function hasCharacters(target: string): boolean {
+  return !!target.replace(/[\s\t\r\n]+/g, '').length
+}
+
+function walkElements(node: Node, metaInfo: MetaInfo, text: string[]) {
   // console.log('id, __INTLIFY__META__', node.nodeName, node.__INTLIFY_META__)
-  const { __INTLIFY_META__ } = node
+  const { __INTLIFY_META__ } = (node as any)
   __INTLIFY_META__ && metaInfo.push(__INTLIFY_META__)
-  node.childNodes.forEach((node: any) => {
-    walkElements(node, metaInfo)
-    // if (node.nodeType === 1 && 'attributes' in node) {
-    //   const element = (node as unknown) as Element
-    //   const value = getIntlifyMetaData(
-    //     (element.attributes as unknown) as Attr[]
-    //   )
-    //   value && metaInfo.push(value)
-    // }
+  node.childNodes.forEach((node: Node) => {
+    // console.log('worker enum', node.nodeType, node.textContent, hasCharacters(node.textContent!))
+    node.nodeType === 3 && node.textContent && hasCharacters(node.textContent) && text.push(node.textContent)
+    walkElements(node, metaInfo, text)
   })
 }
 

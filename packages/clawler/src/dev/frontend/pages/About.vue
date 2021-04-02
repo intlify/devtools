@@ -5,6 +5,6 @@ const title = ref('About')
 
 <template>
   <h2>{{ title }}</h2>
-  <p>This page is about page</p>
+  <p>This page <span>is</span> about page</p>
   <slot></slot>
 </template>
