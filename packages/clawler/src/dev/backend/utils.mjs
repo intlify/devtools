@@ -27,7 +27,7 @@ export async function screenshot(url, ms=0) {
     capturing = true
     browser = await puppeteer.launch({ headless, args })
     const page = await browser.newPage()
-    await page.setViewport({ width, height })
+    await page.setViewport({ width, height, deviceScaleFactor: 2 })
     await page.goto(url, { waitUntil: 'networkidle2' })
     if (ms > 0) {
       await delay(ms)
@@ -43,7 +43,16 @@ export async function screenshot(url, ms=0) {
 }
 
 export async function detect(image) {
-  return Tesseract.recognize(image, 'eng', {
-    // logger: m => console.log(m)
+  const worker = await Tesseract.createWorker()
+  await worker.load()
+  await worker.loadLanguage('jpn+eng')
+  await worker.initialize('jpn+eng')
+  await worker.setParameters({
+    // tessedit_pageseg_mode: Tesseract.PSM.AUTO,
+    tessedit_ocr_engine_mode: Tesseract.OEM.LSTM_ONLY,
+    preserve_interword_spaces: '1'
   })
+  const data = await worker.recognize(image)
+  await worker.terminate()
+  return data
 }
