@@ -40,7 +40,7 @@
   "scripts": {
     "build": "vite build",
     "dev": "cross-env PORT=4000 concurrently -c 'blue.bold,magenta.bold' 'npm:dev:backend' 'npm:dev:frontend'",
-    "dev:backend": "node ./src/dev/backend/index.mjs",
+    "dev:backend": "node -r esbuild-register ./src/dev/backend/index.ts",
     "dev:frontend": "vite",
     "serve": "vite preview"
   },

@@ -59,7 +59,9 @@ function observeDOM(el: HTMLElement, worker: any) {
         walkElements('added', node, mutation.target, body)
         walkTargetElement(mutation.target, textSet)
       })
-      mutation.removedNodes.forEach(node => walkElements('removed', node, mutation.target, body))
+      mutation.removedNodes.forEach(node =>
+        walkElements('removed', node, mutation.target, body)
+      )
     })
 
     body.text = [...textSet]
@@ -96,7 +98,12 @@ function walkTargetElement(node: Node, text: Set<string>) {
   })
 }
 
-function walkElements(type: 'added' | 'removed', node: Node, target: Node, body: MutationRecord) {
+function walkElements(
+  type: 'added' | 'removed',
+  node: Node,
+  target: Node,
+  body: MutationRecord
+) {
   const { __INTLIFY_META__ } = node as any
   const metaInfo = body[type]
   if (isDOMElementNode(target)) {

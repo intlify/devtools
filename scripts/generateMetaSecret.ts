@@ -1,9 +1,10 @@
-const fs = require('fs').promises
-const path = require('path')
-const chalk = require('chalk')
-const { generateSecret } = require('@intlify-devtools/shared')
+import { promises as fs } from 'fs'
+import chalk from 'chalk'
+import path from 'path'
+import { generateSecret } from '@intlify-devtools/shared'
 
 ;(async () => {
+  // @ts-ignore
   const secret = generateSecret()
   await fs.writeFile(
     path.resolve(__dirname, '../packages/clawler/.env.local'),
