@@ -1,7 +1,8 @@
+import { promises as fs } from 'fs'
 import express, { json, urlencoded } from 'express'
 import chalk from 'chalk'
 import { config as dotEnvConfig } from 'dotenv'
-import { generateSecret, decrypt } from '@intlify-devtools/shared'
+import { isEmptyObject, generateSecret, decrypt, getResourceKeys as getResourceI18nKeys } from '@intlify-devtools/shared'
 import { screenshot, detect } from './utils.mjs'
 
 const LOCAL_ENV = dotEnvConfig({ path: './.env.local' }).parsed || {}
@@ -30,7 +31,20 @@ function setComponentPath(paths, components) {
   })
 }
 
-app.get('/', (req, res) => {
+async function getResourceKeys(paths) {
+  const ret = {}
+  for (const p of paths) {
+    const file = await fs.readFile(p, 'utf-8')
+    const keys = getResourceI18nKeys(file)
+    if (keys.length) {
+      ret[p] = keys
+    }
+  }
+  console.log('getResourceKeys', ret)
+  return ret
+}
+
+app.get('/', async (req, res) => {
   console.log('req.query', req.query)
   const { url } = req.query
 
@@ -39,8 +53,11 @@ app.get('/', (req, res) => {
     STORE.set(url, components)
   }
 
+  const keys = await getResourceKeys([...components.paths])
+
   res.status(200).json({
     url,
+    keys,
     paths: [...components.paths],
     screenshot: components.screenshot,
     detect: components.detect
@@ -61,7 +78,7 @@ app.post('/', async (req, res) => {
   if (data) {
     components.screenshot = data
     const d = await detect(data)
-    console.log(d)
+    // console.log(d)
     components.detect = d.data
   }
 

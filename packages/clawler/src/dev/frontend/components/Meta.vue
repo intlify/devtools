@@ -6,6 +6,13 @@
     <ul>
       <li v-for="(path, index) in paths" :key="index">{{ path }}</li>
     </ul>
+    <h4>Resource keys</h4>
+    <ul>
+      <li v-for="(value, key) in keys" :key="key">
+        <h5>{{ key }}</h5>
+        <p>{{ value }}</p>
+      </li>
+    </ul>
     <h4>Screenshot</h4>
     <img v-if="screenshot" class="screenshot" :src="screenshot" />
   </div>
@@ -22,6 +29,10 @@ const props = defineProps({
   paths: {
     type: Array,
     default: () => []
+  },
+  keys: {
+    type: Object,
+    default: () => {}
   },
   screenshot: {
     type: String,

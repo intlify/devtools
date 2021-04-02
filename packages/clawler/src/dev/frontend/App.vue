@@ -35,7 +35,7 @@ const toggle = ref(false)
 const meta = ref(null)
 
 const onClickFetch = async () => {
-  const { url, paths, screenshot } = await (
+  const { url, paths, keys, screenshot } = await (
     await fetch(
       `${getEndPoint()}?url=${encodeURIComponent(window.location.href)}`
     )
@@ -43,6 +43,7 @@ const onClickFetch = async () => {
   meta.value = {
     url,
     paths,
+    keys,
     screenshot
   }
 }

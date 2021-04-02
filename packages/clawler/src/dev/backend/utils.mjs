@@ -44,6 +44,6 @@ export async function screenshot(url, ms=0) {
 
 export async function detect(image) {
   return Tesseract.recognize(image, 'eng', {
-    logger: m => console.log(m)
+    // logger: m => console.log(m)
   })
 }
