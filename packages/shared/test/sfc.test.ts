@@ -95,7 +95,11 @@ describe('getResourceKeys', () => {
     </div>
   </nav>
 </template>`
-    expect(getResourceKeys(source)).toEqual(['title', 'pages.home', 'pages.about'])
+    expect(getResourceKeys(source)).toEqual([
+      'title',
+      'pages.home',
+      'pages.about'
+    ])
   })
 
   test('script block: Option API', () => {
@@ -135,7 +139,10 @@ const { t } = useI18n()
 const message = t('foo.bar.buz')
 const top = await $t('top level async/await')
 </script>`
-    expect(getResourceKeys(source)).toEqual(['foo.bar.buz', 'top level async/await'])
+    expect(getResourceKeys(source)).toEqual([
+      'foo.bar.buz',
+      'top level async/await'
+    ])
   })
 
   test('script block: JSX', () => {
