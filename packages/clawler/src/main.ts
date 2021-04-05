@@ -2,14 +2,18 @@ import html2canvas from 'html2canvas'
 import { attachWorker } from '@intlify/worker-dom/dist/lib/main'
 import WorkerDOM from './worker?worker'
 import { isEmpty, getEndPoint } from './helper'
+import { I18n, Locale, Composer } from 'vue-i18n'
 
-import type { MetaInfo } from './types'
-
-export default async function clawl(el: HTMLElement, Worker?: any) {
+export default async function clawl<
+  Messages,
+  DateTimeFormats,
+  NumberFormats,
+  Legacy extends boolean
+>(el: HTMLElement, i18n: I18n<Messages, DateTimeFormats, NumberFormats, Legacy>, Worker?: any) {
   console.log('clawler run!', el)
   const worker = await attachWorker(el, Worker ? new Worker() : new WorkerDOM())
 
-  observeDOM(el, worker)
+  observeDOM(el, i18n, worker)
 
   console.log('... ready worker')
   await worker.callFunction('ready')
@@ -24,10 +28,12 @@ export default async function clawl(el: HTMLElement, Worker?: any) {
 
   // const canvas = await html2canvas(document.body)
 
+  const i18nGlobal = i18n.global as Composer<Messages, DateTimeFormats, NumberFormats>
   const body = {
     url,
     meta,
     text,
+    locale: i18nGlobal.locale.value,
     // screenshot: canvas.toDataURL(),
     timestamp: new Date().getTime()
   }
@@ -40,21 +46,29 @@ type MutationRecord = {
   removed: string[]
   added: string[]
   text: string[]
+  locale: Locale,
   timestamp?: number
 }
 
-function observeDOM(el: HTMLElement, worker: any) {
+function observeDOM<
+  Messages,
+  DateTimeFormats,
+  NumberFormats,
+  Legacy extends boolean
+>(el: HTMLElement, i18n: I18n<Messages, DateTimeFormats, NumberFormats, Legacy>, worker: any) {
+  const i18nGlobal = i18n.global as Composer<Messages, DateTimeFormats, NumberFormats>
   const observer = new MutationObserver(async mutations => {
     const body: MutationRecord = {
       url: window.location.href,
       removed: [],
       added: [],
-      text: []
+      text: [],
+      locale: i18nGlobal.locale.value
     }
     const textSet = new Set<string>()
 
     mutations.forEach(mutation => {
-      console.log('mutaion observer', mutation)
+      console.log('mutaion observer', mutation, window.__TRANSLAE_STACKS)
       mutation.addedNodes.forEach(node => {
         walkElements('added', node, mutation.target, body)
         walkTargetElement(mutation.target, textSet)
@@ -63,9 +77,10 @@ function observeDOM(el: HTMLElement, worker: any) {
         walkElements('removed', node, mutation.target, body)
       )
     })
+    window.__TRANSLAE_STACKS = []
 
     body.text = [...textSet]
-    body.timestamp = new Date().getTime()
+    body.timestamp = Date.now()
     console.log('text set', body.text)
 
     if (isEmpty(body.removed) && isEmpty(body.added) && isEmpty(body.text)) {

@@ -14,6 +14,7 @@ const LOCAL_ENV = dotEnvConfig({ path: './.env.local' }).parsed || {}
 const SECRET =
   LOCAL_ENV.INTLIFY_META_SECRET ||
   process.env.INTLIFY_META_SECRET ||
+  // @ts-ignore
   generateSecret()
 const PORT = process.env.PORT || 4000
 
@@ -54,7 +55,7 @@ async function getResourceKeys(paths: string[]) {
 
 app.get('/', async (req, res) => {
   console.log('req.query', req.query)
-  const { url } = req.query
+  const { url, locale } = req.query
 
   const components = STORE.has(url) ? STORE.get(url) : { paths: new Set() }
   if (!STORE.has(url)) {
@@ -78,9 +79,11 @@ app.post('/', async (req, res) => {
     meta,
     added,
     removed,
+    locale,
     /* screenshot, */ timestamp,
     text
   } = req.body
+  console.log('locale', locale)
 
   const components = STORE.get(url) || { paths: new Set() }
   STORE.set(url, components)

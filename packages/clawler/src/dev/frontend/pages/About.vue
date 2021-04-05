@@ -1,6 +1,8 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 const title = ref('About')
+onMounted(() => console.log('mounted About'))
+onUnmounted(() => console.log('unmounted About'))
 </script>
 
 <template>

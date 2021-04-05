@@ -12,16 +12,18 @@
   </nav>
   <router-view></router-view>
   <button @click="count++">{{ count }}</button>
+  <p>{{ plugin(`use test ${count}`) }}</p>
   <hr />
   <h2>Meta Info</h2>
-  <a href="javascript:void(0);" @click="onClickFetch">Click fetch Meta</a>
+  <a href="javascript:void(0);" @click="onClickFetch($i18n.locale)">Click fetch Meta</a>
   <Meta v-if="meta != null" v-bind="meta" />
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onUpdated, getCurrentInstance } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { getEndPoint } from '../../helper'
+import { usePluginTest } from './plugin'
 
 import Hello from './components/Hello.vue'
 import Meta from './components/Meta.vue'
@@ -29,15 +31,22 @@ import On from './components/On.vue'
 import Off from './components/Off.vue'
 
 const { t } = useI18n({ inheritLocale: true, useScope: 'global' })
+const { fn: plugin } = usePluginTest()
 
 const count = ref(0)
 const toggle = ref(false)
 const meta = ref(null)
 
-const onClickFetch = async () => {
+const fn = onUpdated(() => {
+  const instance = getCurrentInstance()
+  console.log('fire onUpdated app', instance)
+})
+
+const onClickFetch = async (locale: string) => {
+  console.log('clicke locale', locale)
   const { url, paths, keys, screenshot } = await (
     await fetch(
-      `${getEndPoint()}?url=${encodeURIComponent(window.location.href)}`
+      `${getEndPoint()}?url=${encodeURIComponent(window.location.href)}&locale=${locale}`
     )
   ).json()
   meta.value = {
