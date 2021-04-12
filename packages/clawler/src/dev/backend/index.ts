@@ -7,7 +7,13 @@ import {
   decrypt,
   getResourceKeys as getResourceI18nKeys
 } from '@intlify-devtools/shared'
-import { screenshot, detect } from './utils'
+import { screenshot, recognize } from './utils'
+
+import type {
+  IntlifyDevToolsHookPayloads,
+  IntlifyDevToolsHooks
+} from '@intlify/devtools-if'
+import type { Page, Line, Word } from 'tesseract.js'
 
 const LOCAL_ENV = dotEnvConfig({ path: './.env.local' }).parsed || {}
 // @ts-ignore
@@ -19,6 +25,28 @@ const SECRET =
 const PORT = process.env.PORT || 4000
 
 const STORE = new Map()
+
+type AnalisysLocalization = {
+  url: string
+  components: Map<
+    string,
+    {
+      path: string
+      devtools: Set<IntlifyDevToolsHookPayloads['function:translate']>
+    }
+  >
+  screenshot?: string
+  recoganize?: Page
+  detecting?: Map<
+    string,
+    {
+      lineOrWord: Line | Word
+      devtool: IntlifyDevToolsHookPayloads['function:translate']
+    }
+  >
+}
+
+const STORE2 = new Map<string, AnalisysLocalization>()
 
 const app = express()
 app.use(json({ limit: '200mb' })) // TODO: change to no limit option
@@ -35,7 +63,7 @@ function setComponentPath(paths: string[], components: { paths: Set<string> }) {
   paths.forEach(p => {
     const [iv, encrypedData] = p.split('$')
     const componentPath = decrypt(SECRET, iv, encrypedData)
-    console.log('path', componentPath)
+    // console.log('path', componentPath)
     components.paths.add(componentPath)
   })
 }
@@ -53,6 +81,75 @@ async function getResourceKeys(paths: string[]) {
   return ret
 }
 
+function analysysDevTools(
+  l10n: AnalisysLocalization,
+  devtools: IntlifyDevToolsHookPayloads['function:translate'][]
+) {
+  for (const devtool of devtools) {
+    if (devtool.meta?.__INTLIFY_META__) {
+      const crypedPath = devtool.meta?.__INTLIFY_META__ as string
+      const [iv, encrypedData] = crypedPath.split('$')
+      const componentPath = decrypt(SECRET, iv, encrypedData)
+      console.log('path', componentPath)
+      if (l10n.components.has(crypedPath)) {
+        l10n.components.get(crypedPath)?.devtools.add(devtool)
+      } else {
+        const comp = {
+          path: componentPath,
+          devtools: new Set<IntlifyDevToolsHookPayloads['function:translate']>()
+        }
+        comp.devtools.add(devtool)
+        l10n.components.set(crypedPath, comp)
+      }
+    }
+  }
+  console.log('l10n', l10n.components)
+  return l10n
+}
+
+const normalizeOCRText = (text: string): string =>
+  text.trim().replace(/\r?\n/g, '')
+
+function detectWithDevTools(l10n: AnalisysLocalization, data: Page) {
+  l10n.detecting = new Map()
+  for (const word of data.words) {
+    const lineText = normalizeOCRText(word.line.text)
+    let lineFound = false
+    for (const [key, { devtools }] of l10n.components) {
+      for (const devtool of devtools.values()) {
+        if (devtool.message === lineText) {
+          lineFound = true
+          if (!l10n.detecting!.has(devtool.message)) {
+            l10n.detecting!.set(devtool.message, {
+              lineOrWord: word.line,
+              devtool
+            })
+          } else {
+            console.log('already register', devtool.message)
+          }
+        }
+      }
+    }
+    if (!lineFound) {
+      for (const [key, { devtools }] of l10n.components) {
+        for (const devtool of devtools.values()) {
+          if (devtool.message === word.text) {
+            lineFound = true
+            if (!l10n.detecting!.has(devtool.message)) {
+              l10n.detecting!.set(devtool.message, {
+                lineOrWord: word,
+                devtool
+              })
+            } else {
+              console.log('already register', devtool.message)
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
 app.get('/', async (req, res) => {
   console.log('req.query', req.query)
   const { url, locale } = req.query
@@ -62,14 +159,37 @@ app.get('/', async (req, res) => {
     STORE.set(url, components)
   }
 
+  // @ts-ignore
+  const l10n: AnalisysLocalization = STORE2.has(url)
+    ? STORE2.get(url)
+    : { url, components: new Map(), detecting: new Map() }
+  console.log('/ get', l10n)
+
   const keys = await getResourceKeys([...components.paths])
+
+  // @ts-ignore
+  const data = l10n.screenshot ? l10n.screenshot : await screenshot(url)
+  if (data) {
+    l10n.screenshot = data
+    const result = l10n.recoganize
+      ? l10n.recoganize
+      : (await recognize(data)).data
+    // console.log(d)
+    l10n.recoganize = result
+    if (!l10n.detecting) {
+      detectWithDevTools(l10n, result)
+    }
+    console.log('detect', l10n.detecting)
+    // serializeDetecting(l10n)
+  }
 
   res.status(200).json({
     url,
     keys,
     paths: [...components.paths],
     screenshot: components.screenshot,
-    detect: components.detect
+    recognize: components.recognize,
+    detecting: [...l10n.detecting!.values()]
   })
 })
 
@@ -81,9 +201,15 @@ app.post('/', async (req, res) => {
     removed,
     locale,
     /* screenshot, */ timestamp,
+    devtools,
     text
   } = req.body
-  console.log('locale', locale)
+  // console.log('post /', req.url, locale, devtools)
+  console.log(
+    'post /',
+    url,
+    devtools && devtools.length ? 'devtools exist' : 'devtools none'
+  )
 
   const components = STORE.get(url) || { paths: new Set() }
   STORE.set(url, components)
@@ -92,12 +218,28 @@ app.post('/', async (req, res) => {
   added && setComponentPath(added, components)
   removed && setComponentPath(removed, components)
 
+  const l10n: AnalisysLocalization = STORE2.get(url) || {
+    url,
+    components: new Map()
+  }
+  analysysDevTools(l10n, devtools || [])
+
   const data = await screenshot(url)
   if (data) {
     components.screenshot = data
-    const d = await detect(data)
+    l10n.screenshot = data
+
+    const d = await recognize(data)
     // console.log(d)
-    components.detect = d.data
+    components.recognize = d.data
+    l10n.recoganize = d.data
+    detectWithDevTools(l10n, d.data)
+    // console.log('detect', l10n.detecting)
+    // serializeDetecting(l10n)
+  }
+
+  if (!STORE2.has(url)) {
+    STORE2.set(url, l10n)
   }
 
   res.status(200).json({
@@ -105,7 +247,8 @@ app.post('/', async (req, res) => {
     DOMText: text,
     paths: [...components.paths],
     screenshot: components.screenshot,
-    detect: components.detect
+    recognize: components.recognize,
+    detecting: [...l10n.detecting!.values()]
   })
 })
 

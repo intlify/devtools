@@ -26,7 +26,8 @@ export async function screenshot(url: string, ms = 0) {
     browser = await puppeteer.launch({ headless, args })
     const page = await browser.newPage()
     await page.setViewport({ width, height, deviceScaleFactor: 2 })
-    await page.goto(url, { waitUntil: 'networkidle2' })
+    page.on('console', msg => console.log(`[puppeteer]:`, msg.text()))
+    await page.goto(`${url}?screenshot=true`, { waitUntil: 'networkidle2' })
     if (ms > 0) {
       await delay(ms)
     }
@@ -40,7 +41,7 @@ export async function screenshot(url: string, ms = 0) {
   }
 }
 
-export async function detect(image: string) {
+export async function recognize(image: string) {
   const worker = await Tesseract.createWorker()
   await worker.load()
   await worker.loadLanguage('jpn+eng')

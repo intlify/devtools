@@ -13,13 +13,28 @@
         <p>{{ value }}</p>
       </li>
     </ul>
+    <h4>Detect keys</h4>
+    <ul>
+      <li v-for="detect in detecting" :key="detect.devtool.key">
+        <h5>
+          key: {{ detect.devtool.key }}, message: {{ detect.devtool.message }}
+        </h5>
+        <p>{{ detect.devtool.lineOrWord }}</p>
+      </li>
+    </ul>
     <h4>Screenshot</h4>
-    <img v-if="screenshot" class="screenshot" :src="screenshot" />
+    <canvas ref="canvas" class="screenshot"></canvas>
   </div>
 </template>
 
 <script setup lang="ts">
-import { defineProps } from 'vue'
+import { ref, watchEffect, defineProps } from 'vue'
+
+import type { PropType } from 'vue'
+import type { IntlifyDevToolsHookPayloads } from '@intlify/devtools-if'
+import type { Line, Word } from 'tesseract.js'
+
+const canvas = ref<HTMLCanvasElement>(null)
 
 const props = defineProps({
   url: {
@@ -27,7 +42,7 @@ const props = defineProps({
     default: () => ''
   },
   paths: {
-    type: Array,
+    type: Array as PropType<string[]>,
     default: () => []
   },
   keys: {
@@ -37,7 +52,43 @@ const props = defineProps({
   screenshot: {
     type: String,
     default: () => ''
+  },
+  detecting: {
+    // type: Array,
+    type: Object as PropType<
+      {
+        devtool: IntlifyDevToolsHookPayloads['function:translate']
+        lineOrWord: Line | Word
+      }[]
+    >,
+    default: () => []
   }
+})
+
+watchEffect(() => {
+  console.log('detecting', props.detecting)
+  const img = new Image()
+  img.onload = () => {
+    const el = canvas.value
+    el.width = img.width
+    el.height = img.height
+    const ctx = el.getContext('2d')
+    ctx.drawImage(img, 0, 0)
+    ctx.strokeStyle = 'blue'
+    for (const { lineOrWord } of props.detecting) {
+      ctx.strokeRect(
+        lineOrWord.bbox.x0,
+        lineOrWord.bbox.y0,
+        lineOrWord.bbox.x1 - lineOrWord.bbox.x0,
+        lineOrWord.bbox.y1 - lineOrWord.bbox.y0
+      )
+    }
+  }
+  img.onerror = e => {
+    console.error(e)
+  }
+  // @ts-ignore
+  img.src = props.screenshot
 })
 </script>
 

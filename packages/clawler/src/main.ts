@@ -1,44 +1,48 @@
 import html2canvas from 'html2canvas'
 import { attachWorker } from '@intlify/worker-dom/dist/lib/main'
+import { I18n, Locale, Composer } from 'vue-i18n'
 import WorkerDOM from './worker?worker'
 import { isEmpty, getEndPoint } from './helper'
-import { I18n, Locale, Composer } from 'vue-i18n'
 
-export default async function clawl<
-  Messages,
-  DateTimeFormats,
-  NumberFormats,
-  Legacy extends boolean
->(el: HTMLElement, i18n: I18n<Messages, DateTimeFormats, NumberFormats, Legacy>, Worker?: any) {
-  console.log('clawler run!', el)
-  const worker = await attachWorker(el, Worker ? new Worker() : new WorkerDOM())
+import type { IntlifyHook } from './hook'
 
-  observeDOM(el, i18n, worker)
+export default function clawl(hook: IntlifyHook, Worker?: any) {
+  return async (el: HTMLElement) => {
+    const worker = await attachWorker(
+      el,
+      Worker ? new Worker() : new WorkerDOM()
+    )
+    console.log('clawler run!', el)
 
-  console.log('... ready worker')
-  await worker.callFunction('ready')
-  console.log('... done worker!')
+    const observer = observeDOM(worker, hook)
+    observer.observe(el, { childList: true, subtree: true })
+    console.log('observe!')
 
-  const { url, meta, text } = await worker.callFunction(
-    'walkElements',
-    window.location.href
-  )
-  console.log('collect', meta, text)
-  console.log('page url', url)
+    console.log('... ready worker')
+    await worker.callFunction('ready')
+    console.log('... done worker!')
 
-  // const canvas = await html2canvas(document.body)
+    const { url, meta, text } = await worker.callFunction(
+      'walkElements',
+      window.location.href
+    )
+    console.log('collect', meta, text)
+    console.log('page url', url)
 
-  const i18nGlobal = i18n.global as Composer<Messages, DateTimeFormats, NumberFormats>
-  const body = {
-    url,
-    meta,
-    text,
-    locale: i18nGlobal.locale.value,
-    // screenshot: canvas.toDataURL(),
-    timestamp: new Date().getTime()
+    // const canvas = await html2canvas(document.body)
+
+    // const i18nGlobal = i18n.global as Composer<Messages, DateTimeFormats, NumberFormats>
+    // const body = {
+    //   url,
+    //   meta,
+    //   text,
+    //   locale: 'en', // i18nGlobal.locale.value,
+    //   // screenshot: canvas.toDataURL(),
+    //   timestamp: new Date().getTime()
+    // }
+    // const res = await worker.callFunction('pushMeta', getEndPoint(), body)
+    // console.log('backend res clawl', res, import.meta.env)
   }
-  const res = await worker.callFunction('pushMeta', getEndPoint(), body)
-  console.log('backend res', res, import.meta.env)
 }
 
 type MutationRecord = {
@@ -46,29 +50,24 @@ type MutationRecord = {
   removed: string[]
   added: string[]
   text: string[]
-  locale: Locale,
+  locale?: Locale
+  devtools?: any[]
   timestamp?: number
 }
 
-function observeDOM<
-  Messages,
-  DateTimeFormats,
-  NumberFormats,
-  Legacy extends boolean
->(el: HTMLElement, i18n: I18n<Messages, DateTimeFormats, NumberFormats, Legacy>, worker: any) {
-  const i18nGlobal = i18n.global as Composer<Messages, DateTimeFormats, NumberFormats>
+function observeDOM(worker: any, hook: IntlifyHook) {
   const observer = new MutationObserver(async mutations => {
     const body: MutationRecord = {
       url: window.location.href,
       removed: [],
       added: [],
       text: [],
-      locale: i18nGlobal.locale.value
+      locale: 'en'
     }
     const textSet = new Set<string>()
 
     mutations.forEach(mutation => {
-      console.log('mutaion observer', mutation, window.__TRANSLAE_STACKS)
+      console.log('mutaion observer', mutation)
       mutation.addedNodes.forEach(node => {
         walkElements('added', node, mutation.target, body)
         walkTargetElement(mutation.target, textSet)
@@ -77,10 +76,10 @@ function observeDOM<
         walkElements('removed', node, mutation.target, body)
       )
     })
-    window.__TRANSLAE_STACKS = []
 
     body.text = [...textSet]
     body.timestamp = Date.now()
+    body.devtools = hook.translatePayload
     console.log('text set', body.text)
 
     if (isEmpty(body.removed) && isEmpty(body.added) && isEmpty(body.text)) {
@@ -90,12 +89,16 @@ function observeDOM<
     // const canvas = await html2canvas(document.body)
     // body.screenshot = canvas.toDataURL()
 
+    console.log('hook payloads', hook.i18nPayload, hook.translatePayload)
+
     console.log('send body ...', body)
     const res = await worker.callFunction('pushMeta', getEndPoint(), body)
-    console.log('backend res', res, import.meta.env)
+    console.log('backend res observeDOM', res, import.meta.env)
+
+    hook.clearTranslatePayload()
   })
 
-  observer.observe(el, { childList: true, subtree: true })
+  return observer
 }
 
 function isDOMElementNode(node: Node): node is Element {

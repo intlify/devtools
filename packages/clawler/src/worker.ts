@@ -30,6 +30,7 @@ const exportingFunctions = {
     endpoint: string,
     body: Record<string, unknown>
   ): Promise<Record<string, unknown>> {
+    console.log('worker:pushMeta', endpoint, body)
     return (
       await fetch(endpoint, {
         method: 'post',

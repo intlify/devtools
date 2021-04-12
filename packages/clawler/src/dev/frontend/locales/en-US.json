@@ -1,5 +1,7 @@
 {
   "title": "Dev Clawler!",
+  "banana": "How dou you have banana? I have @:bananaItems",
+  "bananaItems": "no bananas | {n} banana | {n} bananas",
   "pages": {
     "home": "Home",
     "about": "About"

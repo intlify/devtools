@@ -1,5 +1,5 @@
-export function isEmpty(items: unknown[]) {
-  return items.length === 0
+export function isEmpty(items?: unknown[]) {
+  return items && items.length === 0
 }
 
 export function getEndPoint() {
