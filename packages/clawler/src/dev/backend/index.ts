@@ -9,10 +9,7 @@ import {
 } from '@intlify-devtools/shared'
 import { screenshot, recognize } from './utils'
 
-import type {
-  IntlifyDevToolsHookPayloads,
-  IntlifyDevToolsHooks
-} from '@intlify/devtools-if'
+import type { IntlifyDevToolsHookPayloads, } from '@intlify/devtools-if'
 import type { Page, Line, Word } from 'tesseract.js'
 
 const LOCAL_ENV = dotEnvConfig({ path: './.env.local' }).parsed || {}
@@ -44,6 +41,7 @@ type AnalisysLocalization = {
       devtool: IntlifyDevToolsHookPayloads['function:translate']
     }
   >
+  notyet?: Map<string, Line | Word>
 }
 
 const STORE2 = new Map<string, AnalisysLocalization>()
@@ -112,6 +110,13 @@ const normalizeOCRText = (text: string): string =>
 
 function detectWithDevTools(l10n: AnalisysLocalization, data: Page) {
   l10n.detecting = new Map()
+  l10n.notyet = new Map()
+
+  // TODO: need to refactoring
+  const notDetect = (l: Line | Word) => {
+    return ![...l10n.detecting!.values()].some(value => value.lineOrWord === l)
+  }
+
   for (const word of data.words) {
     const lineText = normalizeOCRText(word.line.text)
     let lineFound = false
@@ -131,6 +136,7 @@ function detectWithDevTools(l10n: AnalisysLocalization, data: Page) {
       }
     }
     if (!lineFound) {
+      // TODO: refactoring
       for (const [key, { devtools }] of l10n.components) {
         for (const devtool of devtools.values()) {
           if (devtool.message === word.text) {
@@ -146,6 +152,11 @@ function detectWithDevTools(l10n: AnalisysLocalization, data: Page) {
           }
         }
       }
+    }
+
+    if (!lineFound) {
+      l10n.notyet.set(lineText !== word.text ? lineText : word.text, lineText !== word.text ? word.line : word)
+      //l10n.notyet.set(lineText, word.line)
     }
   }
 }
@@ -189,7 +200,8 @@ app.get('/', async (req, res) => {
     paths: [...components.paths],
     screenshot: components.screenshot,
     recognize: components.recognize,
-    detecting: [...l10n.detecting!.values()]
+    detecting: [...l10n.detecting!.values()],
+    notyet: [...l10n.notyet!.values()]
   })
 })
 
@@ -248,7 +260,8 @@ app.post('/', async (req, res) => {
     paths: [...components.paths],
     screenshot: components.screenshot,
     recognize: components.recognize,
-    detecting: [...l10n.detecting!.values()]
+    detecting: [...l10n.detecting!.values()],
+    notyet: [...l10n.notyet!.values()]
   })
 })
 

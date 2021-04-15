@@ -17,7 +17,7 @@
     <ul>
       <li v-for="detect in detecting" :key="detect.devtool.key">
         <h5>
-          key: {{ detect.devtool.key }}, message: {{ detect.devtool.message }}
+          key: {{ detect.devtool.key }}, format: {{ detect.devtool.format }}, message: {{ detect.devtool.message }}
         </h5>
         <p>{{ detect.devtool.lineOrWord }}</p>
       </li>
@@ -62,6 +62,10 @@ const props = defineProps({
       }[]
     >,
     default: () => []
+  },
+  notyet: {
+    type: Array as PropType<(Line | Word)[]>,
+    default: () => []
   }
 })
 
@@ -83,6 +87,18 @@ watchEffect(() => {
         lineOrWord.bbox.y1 - lineOrWord.bbox.y0
       )
     }
+    if (props.notyet.length) {
+      ctx.strokeStyle = 'green'
+      for( const lineOrWord of props.notyet) {
+        ctx.strokeRect(
+          lineOrWord.bbox.x0,
+          lineOrWord.bbox.y0,
+          lineOrWord.bbox.x1 - lineOrWord.bbox.x0,
+          lineOrWord.bbox.y1 - lineOrWord.bbox.y0
+        )
+      }
+    }
+    
   }
   img.onerror = e => {
     console.error(e)

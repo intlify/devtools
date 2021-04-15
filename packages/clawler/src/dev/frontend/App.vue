@@ -8,11 +8,13 @@
       <router-link :to="{ name: 'about' }">{{ t('pages.about') }}</router-link>
     </div>
     <input v-model="toggle" type="checkbox" />
-    <On v-if="toggle"></On>
-    <Off v-else></Off>
+    <label style="display:flex;">
+      <On v-if="toggle"></On>
+      <Off v-else></Off>
+    </label>
   </nav>
   <router-view></router-view>
-  <button @click="count++">{{ count }}</button>
+  <button style="display:block" @click="count++">{{ count }}</button>
   <hr />
   <h2>Meta Info</h2>
   <a href="javascript:void(0);" @click="onClickFetch($i18n.locale)"
@@ -39,7 +41,7 @@ const meta = ref(null)
 
 const onClickFetch = async (locale: string) => {
   console.log('clicke locale', locale)
-  const { url, paths, keys, screenshot, detecting } = await (
+  const { url, paths, keys, screenshot, detecting, notyet } = await (
     await fetch(
       `${getEndPoint()}?url=${encodeURIComponent(
         window.location.href
@@ -51,7 +53,8 @@ const onClickFetch = async (locale: string) => {
     paths,
     keys,
     screenshot,
-    detecting
+    detecting,
+    notyet
   }
   console.log('fetch data', meta.value)
 }

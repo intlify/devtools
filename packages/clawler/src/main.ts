@@ -1,8 +1,7 @@
-import html2canvas from 'html2canvas'
 import { attachWorker } from '@intlify/worker-dom/dist/lib/main'
-import { I18n, Locale, Composer } from 'vue-i18n'
+import { Locale } from 'vue-i18n'
 import WorkerDOM from './worker?worker'
-import { isEmpty, getEndPoint } from './helper'
+import { isEmpty, getEndPoint, extractDomContent } from './helper'
 
 import type { IntlifyHook } from './hook'
 
@@ -71,6 +70,7 @@ function observeDOM(worker: any, hook: IntlifyHook) {
       mutation.addedNodes.forEach(node => {
         walkElements('added', node, mutation.target, body)
         walkTargetElement(mutation.target, textSet)
+        console.log('extract-dom-content', extractDomContent(mutation.target, { returnAsArray: true }))
       })
       mutation.removedNodes.forEach(node =>
         walkElements('removed', node, mutation.target, body)
