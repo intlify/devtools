@@ -1,4 +1,5 @@
 import { promises as fs } from 'fs'
+import path from 'path'
 import express, { json, urlencoded } from 'express'
 import chalk from 'chalk'
 import { config as dotEnvConfig } from 'dotenv'
@@ -8,9 +9,19 @@ import {
   getResourceKeys as getResourceI18nKeys
 } from '@intlify-devtools/shared'
 import { screenshot, recognize } from './utils'
+import { getPhraseInfo, getKeys, uploadResource } from './phrase'
+
+declare global{
+  namespace Express {
+    interface Request {
+      phraseInfo?: PhraseInfo
+    }
+  }
+}
 
 import type { IntlifyDevToolsHookPayloads, } from '@intlify/devtools-if'
 import type { Page, Line, Word } from 'tesseract.js'
+import type { PhraseInfo } from './phrase'
 
 const LOCAL_ENV = dotEnvConfig({ path: './.env.local' }).parsed || {}
 // @ts-ignore
@@ -54,6 +65,14 @@ app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*')
   res.header('Access-Control-Allow-Methods', '*')
   res.header('Access-Control-Allow-Headers', '*')
+  next()
+})
+app.use(async (req, res, next) => {
+  if (req.phraseInfo == null) {
+    req.phraseInfo = await getPhraseInfo()
+    // const keys = await getKeys(req.phraseInfo!)
+    // console.log('keys', keys)
+  }
   next()
 })
 
@@ -160,6 +179,17 @@ function detectWithDevTools(l10n: AnalisysLocalization, data: Page) {
     }
   }
 }
+
+app.get('/upload', async (req, res) => {
+  console.log('request upload ...')
+  const fileTarget = path.resolve(__dirname, '../frontend/locales/en-US.json')
+  console.log('filetarget', fileTarget)
+  const ret = await uploadResource(req.phraseInfo!, fileTarget)
+  console.log('uploade status', ret)
+  res.status(200).json({
+    stat: 'ok'
+  })
+})
 
 app.get('/', async (req, res) => {
   console.log('req.query', req.query)

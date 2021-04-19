@@ -16,6 +16,9 @@
   <router-view></router-view>
   <button style="display:block" @click="count++">{{ count }}</button>
   <hr />
+  <h2>Phrase API operations</h2>
+  <a href="javascript:void(0);" @click="onClickResourceUpload">Resource Upload</a>
+  <hr />
   <h2>Meta Info</h2>
   <a href="javascript:void(0);" @click="onClickFetch($i18n.locale)"
     >Click fetch Meta</a
@@ -57,6 +60,11 @@ const onClickFetch = async (locale: string) => {
     notyet
   }
   console.log('fetch data', meta.value)
+}
+
+const onClickResourceUpload = async () => {
+  const res = await fetch(`${getEndPoint()}/upload`)
+  console.log('upload res', res)
 }
 </script>
 
