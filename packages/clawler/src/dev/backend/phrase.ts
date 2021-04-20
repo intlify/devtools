@@ -1,16 +1,14 @@
-import { promises as fs } from 'fs'
+import { default as _fs, promises as fs } from 'fs'
 import fetch from 'node-fetch'
-// import FormData from 'form-data'
-import { FormData } from 'formdata-node'
-import Blob from 'fetch-blob'
-import { Configuration, KeysApi, ProjectsApi, LocalesApi, UploadsApi } from 'phrase-js'
+import FormData from 'form-data'
+import { Configuration, KeysApi, ProjectsApi, LocalesApi, UploadsApi, FormatsApi } from 'phrase-js'
 import { config as dotEnvConfig } from 'dotenv'
 
 import type { Project, Locale } from 'phrase-js'
 
 const globalAny: any = global
 globalAny.window = { fetch }
-globalAny.Blob = Blob
+globalAny.fetch = fetch
 globalAny.FormData = FormData
 globalAny.atob = (a: string) => Buffer.from(a, 'base64').toString('binary')
 globalAny.btoa = (b: ArrayBuffer | SharedArrayBuffer) => Buffer.from(b).toString('base64')
@@ -25,12 +23,14 @@ export type PhraseInfo = {
 
 export async function getPhraseInfo() {
   let info = {} as PhraseInfo
-  info.conf = new Configuration({ apiKey: `token ${LOCAL_ENV['PHRASE_API_TOKEN']}` })
+  info.conf = new Configuration({ apiKey: `Bearer ${LOCAL_ENV['PHRASE_API_TOKEN']}` })
   const project = new ProjectsApi(info.conf)
   const projects = await project.projectsList({ page: 1, perPage: 25 })
   info.project = projects[0]
   const locales = await getLocales(info)
   info.locale = locales.find(l => l.code! == 'en-US')
+  // const formatAPI = await new FormatsApi(info.conf)
+  // console.log(await formatAPI.formatsList({}))
   return info
 }
 
@@ -44,19 +44,20 @@ export async function getLocales(info: PhraseInfo) {
   return await localesAPI.localesList({ projectId: info.project.id! })
 }
 
+export async function uploadResources(info: PhraseInfo) {
+  const uploadAPI = new UploadsApi(info.conf)
+  return await uploadAPI.uploadsList({ projectId: info.project.id! })
+}
+
 export async function uploadResource(info: PhraseInfo, filepath: string) {
   const uploadAPI = new UploadsApi(info.conf)
-  const buffer = await fs.readFile(filepath)
-  // const blob = Uint8Array.from(buffer).buffer
-  const blob = new Blob([Uint8Array.from(buffer).buffer], { type: 'text/plain'})
-  console.log('blog', await blob.text())
   let ret = {}
   try {
     ret = await uploadAPI.uploadCreate({
         projectId: info.project.id!,
-        fileFormat: 'json',
-        file: blob as any,
-        localeId: info.locale!.id!
+        localeId: info.locale!.id!,
+        fileFormat: 'nested_json',
+        file: _fs.createReadStream(filepath) as any // cannot work Blob ...
     })
   } catch (e) {
     console.error(e)

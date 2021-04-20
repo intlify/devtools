@@ -17,7 +17,9 @@
   <button style="display:block" @click="count++">{{ count }}</button>
   <hr />
   <h2>Phrase API operations</h2>
-  <a href="javascript:void(0);" @click="onClickResourceUpload">Resource Upload</a>
+  <a href="javascript:void(0);" @click="onClickResourceUpload">Upload Resource</a>
+  <br />
+  <a href="javascript:void(0);" @click="onClickScreenshot">Upload Screenshot</a>
   <hr />
   <h2>Meta Info</h2>
   <a href="javascript:void(0);" @click="onClickFetch($i18n.locale)"
@@ -65,6 +67,11 @@ const onClickFetch = async (locale: string) => {
 const onClickResourceUpload = async () => {
   const res = await fetch(`${getEndPoint()}/upload`)
   console.log('upload res', res)
+}
+
+const onClickScreenshot = async () => {
+  const res = await fetch(`${getEndPoint()}/upload?sh=true`)
+  console.log('upload screenshot', res)
 }
 </script>
 

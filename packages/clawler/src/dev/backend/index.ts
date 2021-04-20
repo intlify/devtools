@@ -9,7 +9,7 @@ import {
   getResourceKeys as getResourceI18nKeys
 } from '@intlify-devtools/shared'
 import { screenshot, recognize } from './utils'
-import { getPhraseInfo, getKeys, uploadResource } from './phrase'
+import { getPhraseInfo, getKeys, uploadResources, uploadResource } from './phrase'
 
 declare global{
   namespace Express {
@@ -72,6 +72,8 @@ app.use(async (req, res, next) => {
     req.phraseInfo = await getPhraseInfo()
     // const keys = await getKeys(req.phraseInfo!)
     // console.log('keys', keys)
+    // const uploads = await uploadResources(req.phraseInfo!)
+    // console.log('uploads', uploads)
   }
   next()
 })
@@ -182,13 +184,23 @@ function detectWithDevTools(l10n: AnalisysLocalization, data: Page) {
 
 app.get('/upload', async (req, res) => {
   console.log('request upload ...')
-  const fileTarget = path.resolve(__dirname, '../frontend/locales/en-US.json')
-  console.log('filetarget', fileTarget)
-  const ret = await uploadResource(req.phraseInfo!, fileTarget)
-  console.log('uploade status', ret)
-  res.status(200).json({
-    stat: 'ok'
-  })
+  console.log('req.query', req.query)
+  const { sh } = req.query
+
+  if (sh) {
+    console.log('upload screenshot status')
+    res.status(200).json({
+      stat: 'ok'
+    })
+  } else {
+    const fileTarget = path.resolve(__dirname, '../frontend/locales/en-US.json')
+    console.log('filetarget', fileTarget)
+    const ret = await uploadResource(req.phraseInfo!, fileTarget)
+    console.log('upload resource status', ret)
+    res.status(200).json({
+      stat: 'ok'
+    })
+  }
 })
 
 app.get('/', async (req, res) => {
