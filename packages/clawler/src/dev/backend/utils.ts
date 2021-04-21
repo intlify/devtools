@@ -1,5 +1,6 @@
 import puppeteer from 'puppeteer'
 import Tesseract from 'tesseract.js'
+import path from 'path'
 
 const headless = true
 const slowMo = 10
@@ -15,7 +16,7 @@ function delay(ms: number) {
 
 let capturing = false
 
-export async function screenshot(url: string, ms = 0) {
+export async function screenshot(url: string, filepath?: string, ms = 0) {
   let browser = null
   if (capturing) {
     return null
@@ -31,8 +32,14 @@ export async function screenshot(url: string, ms = 0) {
     if (ms > 0) {
       await delay(ms)
     }
-    const data = await page.screenshot({ encoding: 'base64' })
-    return `data:image/png;base64,${data}`
+    let options = null
+    if (filepath) {
+      options = { type: 'png', path: filepath }
+    } else {
+      options = { encoding: 'base64' }
+    }
+    const data = await page.screenshot(options as any)
+    return filepath ? null : `data:image/png;base64,${data}`
   } finally {
     if (browser) {
       browser.close()

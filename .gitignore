@@ -3,6 +3,7 @@
 .local
 coverage
 node_modules
+tmp/*.png
 dist
 dist-ssr
 lib

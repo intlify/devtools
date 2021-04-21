@@ -1,10 +1,11 @@
 import { default as _fs, promises as fs } from 'fs'
 import fetch from 'node-fetch'
 import FormData from 'form-data'
-import { Configuration, KeysApi, ProjectsApi, LocalesApi, UploadsApi, FormatsApi } from 'phrase-js'
+import { Configuration, KeysApi, ProjectsApi, LocalesApi, UploadsApi, ScreenshotsApi, ScreenshotMarkersApi } from 'phrase-js'
 import { config as dotEnvConfig } from 'dotenv'
 
 import type { Project, Locale } from 'phrase-js'
+import type { AnalisysLocalization } from './index'
 
 const globalAny: any = global
 globalAny.window = { fetch }
@@ -58,6 +59,22 @@ export async function uploadResource(info: PhraseInfo, filepath: string) {
         localeId: info.locale!.id!,
         fileFormat: 'nested_json',
         file: _fs.createReadStream(filepath) as any // cannot work Blob ...
+    })
+  } catch (e) {
+    console.error(e)
+  }
+}
+
+export async function uploadScreenshot(info: PhraseInfo, l10n: AnalisysLocalization, filepath: string) {
+  const screenshotAPI = new ScreenshotsApi(info.conf)
+  try {
+    const screenshot = await screenshotAPI.screenshotCreate({
+      projectId: info.project.id!,
+      screenshotCreateParameters: {
+        name: l10n.url,
+        description: l10n.url,
+        filename: _fs.createWriteStream(filepath) as any
+      }
     })
   } catch (e) {
     console.error(e)

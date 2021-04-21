@@ -70,7 +70,7 @@ const onClickResourceUpload = async () => {
 }
 
 const onClickScreenshot = async () => {
-  const res = await fetch(`${getEndPoint()}/upload?sh=true`)
+  const res = await fetch(`${getEndPoint()}/upload?sh=true&url=${encodeURIComponent(window.location.href)}`)
   console.log('upload screenshot', res)
 }
 </script>

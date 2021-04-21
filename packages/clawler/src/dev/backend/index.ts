@@ -9,7 +9,7 @@ import {
   getResourceKeys as getResourceI18nKeys
 } from '@intlify-devtools/shared'
 import { screenshot, recognize } from './utils'
-import { getPhraseInfo, getKeys, uploadResources, uploadResource } from './phrase'
+import { getPhraseInfo, getKeys, uploadResources, uploadResource, uploadScreenshot } from './phrase'
 
 declare global{
   namespace Express {
@@ -34,7 +34,7 @@ const PORT = process.env.PORT || 4000
 
 const STORE = new Map()
 
-type AnalisysLocalization = {
+export type AnalisysLocalization = {
   url: string
   components: Map<
     string,
@@ -185,9 +185,29 @@ function detectWithDevTools(l10n: AnalisysLocalization, data: Page) {
 app.get('/upload', async (req, res) => {
   console.log('request upload ...')
   console.log('req.query', req.query)
-  const { sh } = req.query
+  const { sh, url } = req.query
 
   if (sh) {
+    if (url) {
+      const filepath = path.resolve(__dirname, './tmp/screenshot.png')
+      await screenshot(url, filepath)
+        // @ts-ignore
+      const l10n: AnalisysLocalization = STORE2.has(url)
+        ? STORE2.get(url)
+        : { url, components: new Map(), detecting: new Map() }
+      const buffer = await fs.readFile(filepath, 'base64')
+      const data = `data:image/png;base64,${buffer}`
+      const result = l10n.recoganize
+        ? l10n.recoganize
+        : (await recognize(data)).data
+      l10n.recoganize = result
+      l10n.screenshot = data
+      if (!l10n.detecting) {
+        detectWithDevTools(l10n, result)
+      }
+      await uploadScreenshot(req.phraseInfo!, l10n, filepath)
+      console.log('detect', l10n.detecting)
+    }
     console.log('upload screenshot status')
     res.status(200).json({
       stat: 'ok'
