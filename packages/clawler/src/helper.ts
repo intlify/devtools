@@ -6,7 +6,10 @@ export function getEndPoint() {
   return import.meta.env.VITE_BASE_ENDPOINT as string
 }
 
-export function extractDomContent(originalNode: any, options: Record<string, unknown> = {}) {
+export function extractDomContent(
+  originalNode: any,
+  options: Record<string, unknown> = {}
+) {
   const mainNode = originalNode.cloneNode(true)
   const allOriginalNodes = originalNode.querySelectorAll('*')
   const allClonedNodes = mainNode.querySelectorAll('*')
@@ -76,7 +79,12 @@ export function extractDomContent(originalNode: any, options: Record<string, unk
     /<h([1-6])(.+?)<\/h\1>/g,
     '\n<h$1$2</h1>\n'
   )
-  console.log('innnerHTML', mainNode.innerHTML, mainNode.innerText, mainNode.textContent)
+  console.log(
+    'innnerHTML',
+    mainNode.innerHTML,
+    mainNode.innerText,
+    mainNode.textContent
+  )
 
   // Home stretch...
   const rawContent = (mainNode.innerText || mainNode.textContent || '')
@@ -88,7 +96,7 @@ export function extractDomContent(originalNode: any, options: Record<string, unk
 
   if (options.removeDuplicates || false) {
     // Get an array of strings without duplicates via the Set constructor and spread operator
-    let contentStrings = [...new Set(rawContent.split('\n'))]
+    const contentStrings = [...new Set(rawContent.split('\n'))]
 
     if (options.returnAsArray || false) {
       return contentStrings

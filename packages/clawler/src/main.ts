@@ -70,7 +70,10 @@ function observeDOM(worker: any, hook: IntlifyHook) {
       mutation.addedNodes.forEach(node => {
         walkElements('added', node, mutation.target, body)
         walkTargetElement(mutation.target, textSet)
-        console.log('extract-dom-content', extractDomContent(mutation.target, { returnAsArray: true }))
+        console.log(
+          'extract-dom-content',
+          extractDomContent(mutation.target, { returnAsArray: true })
+        )
       })
       mutation.removedNodes.forEach(node =>
         walkElements('removed', node, mutation.target, body)

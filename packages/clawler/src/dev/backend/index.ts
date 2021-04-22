@@ -9,9 +9,15 @@ import {
   getResourceKeys as getResourceI18nKeys
 } from '@intlify-devtools/shared'
 import { screenshot, recognize } from './utils'
-import { getPhraseInfo, getKeys, uploadResources, uploadResource, uploadScreenshot } from './phrase'
+import {
+  getPhraseInfo,
+  getKeys,
+  uploadResources,
+  uploadResource,
+  uploadScreenshot
+} from './phrase'
 
-declare global{
+declare global {
   namespace Express {
     interface Request {
       phraseInfo?: PhraseInfo
@@ -19,7 +25,7 @@ declare global{
   }
 }
 
-import type { IntlifyDevToolsHookPayloads, } from '@intlify/devtools-if'
+import type { IntlifyDevToolsHookPayloads } from '@intlify/devtools-if'
 import type { Page, Line, Word } from 'tesseract.js'
 import type { PhraseInfo } from './phrase'
 
@@ -176,8 +182,11 @@ function detectWithDevTools(l10n: AnalisysLocalization, data: Page) {
     }
 
     if (!lineFound) {
-      l10n.notyet.set(lineText !== word.text ? lineText : word.text, lineText !== word.text ? word.line : word)
-      //l10n.notyet.set(lineText, word.line)
+      l10n.notyet.set(
+        lineText !== word.text ? lineText : word.text,
+        lineText !== word.text ? word.line : word
+      )
+      // l10n.notyet.set(lineText, word.line)
     }
   }
 }
@@ -191,7 +200,7 @@ app.get('/upload', async (req, res) => {
     if (url) {
       const filepath = path.resolve(__dirname, './tmp/screenshot.png')
       await screenshot(url, filepath)
-        // @ts-ignore
+      // @ts-ignore
       const l10n: AnalisysLocalization = STORE2.has(url)
         ? STORE2.get(url)
         : { url, components: new Map(), detecting: new Map() }
@@ -206,7 +215,7 @@ app.get('/upload', async (req, res) => {
         detectWithDevTools(l10n, result)
       }
       await uploadScreenshot(req.phraseInfo!, l10n, filepath)
-      console.log('detect', l10n.detecting)
+      // console.log('detect', l10n.detecting)
     }
     console.log('upload screenshot status')
     res.status(200).json({

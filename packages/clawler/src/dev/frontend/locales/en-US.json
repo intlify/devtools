@@ -1,7 +1,8 @@
 {
-  "title": "Dev Clawler!",
+  "title": "Your web application",
   "banana": "How dou you have banana? I have @:bananaItems",
   "bananaItems": "no bananas | {n} banana | {n} bananas",
+  "quantity": "Quantity",
   "pages": {
     "home": "Home",
     "about": "About"
